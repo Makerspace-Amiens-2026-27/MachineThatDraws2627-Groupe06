@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "AAAA-MM-JJ : sujet de la séance"
-parent: SZESTAK Sacha
+parent: HALEZA Sacha
 grand_parent: Journal de bord
 ---
 
