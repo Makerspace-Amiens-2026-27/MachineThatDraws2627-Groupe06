@@ -19,11 +19,11 @@ title: Équipe et rôles
 
 | Membre | Formation | Compte GitHub |
 |---|---|---|
-| Sacha SZESTAK | … | [@Sacha-SZESTAK](https://github.com/sacha-SZESTAK) |
-| Sacha HALEZA | … | [@Sacha-HALEZA](https://github.com/sachahaleza-stack) |
-| Adrien SERVANT | … | [@Adrien-SERVANT](https://github.com/Adrien-Servant) |
-| Samuel MOATTI | … | [@SamSam](https://github.com/SamuelMOATTI) |
-| Louis DUBRAY | … | [@Louis-DUBAY](https://github.com/louis-DB) |
+| Sacha SZESTAK | Ingénieur ++ MAX | [@Sacha-SZESTAK](https://github.com/sacha-SZESTAK) |
+| Sacha HALEZA | éboueur | [@Sacha-HALEZA](https://github.com/sachahaleza-stack) |
+| Adrien SERVANT | Coureur de marathon | [@Adrien-SERVANT](https://github.com/Adrien-Servant) |
+| Samuel MOATTI | Consommateur engagé au distributeur | [@SamSam](https://github.com/SamuelMOATTI) |
+| Louis DUBRAY | Etudiant | [@Louis-DUBAY](https://github.com/louis-DB) |
 
 
 ## Rôles
