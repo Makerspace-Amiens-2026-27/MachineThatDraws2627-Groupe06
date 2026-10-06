@@ -16,7 +16,7 @@ permalink: /
 > Les guides pour prendre en main ce template sont sur le
 > [site de documentation du MakerSpace](https://doc.makerspace-amiens.fr/workshops/methodologie-de-projet/).
 
-# Nom du projet
+# Dessinator 2000
 
 {: .a_modifier }
 > Remplacez le titre ci-dessus et le texte ci-dessous par une présentation de votre projet.
@@ -25,7 +25,7 @@ Décrivez ici en quelques lignes l'objectif de votre projet. Quel est son but ?
 À qui est-il destiné ? Quel problème cherche-t-il à résoudre ?
 
 [Notre repo GitHub]({{ site.gh_edit_repository }}){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
-[Notre projet sur Onshape](https://cad.onshape.com/){: .btn .fs-5 .mb-4 .mb-md-0 }
+[Notre projet sur Onshape](https://cad.onshape.com/documents/eb018d09dc54c2fadac24e96/w/1578f70ff87210c568a8d591/e/b4e26a952c710b7e93cb7ce3?renderMode=0&uiState=6ac4bd92a34aa999c9fa541b){: .btn .fs-5 .mb-4 .mb-md-0 }
 
 {: .a_modifier }
 > Remplacez le lien du bouton « Onshape » par le lien de partage de votre document.
