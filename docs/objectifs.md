@@ -29,9 +29,20 @@ title: Objectifs du projet
 > **FC** pour une fonction contrainte (ce à quoi il doit s'adapter).
 > Flexibilité : de F0 (impératif) à F3 (négociable). Exemple :
 
+### Fonctions principales
+
 | Fonction | Critère | Niveau attendu | Flexibilité |
 |---|---|---|---|
-| FP1 : trier les déchets | Taux de tri correct | ≥ 80 % sur 20 essais | F1 |
-| FP2 : informer le visiteur | Lisibilité du panneau | Lisible à 2 m | F2 |
-| FC1 : s'alimenter | Autonomie sur batterie | ≥ 4 h | F0 |
-| FC2 : s'intégrer au tapis | Largeur | ≤ 1 m | F0 |
+| FP1 : Taille du dessin | Surface de dessin suffisante | > A4 | F1 |
+| FP2 : Tracer un dessin | Écart sur un carré de 10mm | ≤ 1mm par coté | F1 |
+| FP3 : Tracer sans aide | Intervention pendant un tracé | aucune | F0 |
+| FP4 : Se présenter au public | Durée d'ub tracé de démo | ≤ 5 min | F2 |
+
+### Fonctions Contraintes
+| Fonction | Critère | Niveau attendu | Flexibilité |
+|---|---|---|---|
+| FC1 : Utiliser la base fournie | Fixation sur plaque percée | aucun perçage supplémentaire | F0 |
+| FC2 : Utiliser le kit fourni | Composants hors kit | Justifiés et validés | F1 |
+| FC3 : Fabriquer au MakerSpace | Procédés | Machines et outils du lieu | F1 |
+| FC4 : Tenir le calendrier | Proof of concept | Fonctionnel fin du S1 | F0 |
+| FC5 : Sécurité du public | Pièces en mouvement | aucun pincement possible | F0 |
