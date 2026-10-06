@@ -39,6 +39,7 @@ title: Objectifs du projet
 | FP4 : Se présenter au public | Durée d'ub tracé de démo | ≤ 5 min | F2 |
 
 ### Fonctions Contraintes
+
 | Fonction | Critère | Niveau attendu | Flexibilité |
 |---|---|---|---|
 | FC1 : Utiliser la base fournie | Fixation sur plaque percée | aucun perçage supplémentaire | F0 |
