@@ -19,8 +19,12 @@ title: Équipe et rôles
 
 | Membre | Formation | Compte GitHub |
 |---|---|---|
-| Prénom Nom | … | [@pseudo](https://github.com/pseudo) |
-| Prénom Nom | … | [@pseudo](https://github.com/pseudo) |
+| Sacha SZESTAK | … | [@pseudo](https://github.com/sacha-SZESTAK) |
+| Sacha HALEZA | … | [@pseudo](https://github.com/sachahaleza-stack) |
+| Adrien SERVANT | … | [@pseudo](https://github.com/Adrien-Servant) |
+| Samuel MOATTI | … | [@pseudo](https://github.com/SamuelMOATTI) |
+| Louis DUBRAY | … | [@pseudo](https://github.com/louis-DB) |
+
 
 ## Rôles
 
