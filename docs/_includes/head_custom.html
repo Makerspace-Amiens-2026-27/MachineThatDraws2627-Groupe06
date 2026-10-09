@@ -1,2 +1,33 @@
-<!-- Formules mathématiques : écrire en LaTeX entre $$ ... $$ dans les pages -->
-<script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js"></script>
+<!-- À placer dans : _includes/head_custom.html -->
+<script>
+  try {
+    var xpCfg = JSON.parse(localStorage.getItem('xp_config') || '{}');
+    if (xpCfg.theme === 'classic') document.documentElement.classList.add('xp-classic');
+
+    if (localStorage.getItem('mode_xp_enabled') === 'true') {
+      document.documentElement.classList.add('xp-on');
+      // Filet de sécurité : si le bureau XP n'est pas monté après 3 s, on rend le site normal
+      setTimeout(function () {
+        if (!document.getElementById('xp-desktop-environment')) {
+          document.documentElement.classList.remove('xp-on');
+          localStorage.setItem('mode_xp_enabled', 'false');
+        }
+      }, 3000);
+    }
+  } catch (e) {}
+</script>
+<style>
+  /* Évite le flash du site normal quand le mode XP est mémorisé */
+  html.xp-on body > *:not(#xp-desktop-environment):not(script):not(template):not(style):not(link) {
+    display: none !important;
+  }
+  html.xp-on #btn-switch-xp { display: none !important; }
+  html.xp-on #xp-desktop-environment {
+    display: block !important;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 2147483000 !important;
+    overflow: hidden;
+  }
+  html.xp-on body { overflow: hidden; }
+</style>

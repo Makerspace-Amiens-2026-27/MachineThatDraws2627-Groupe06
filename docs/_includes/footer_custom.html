@@ -1,0 +1,263 @@
+<!-- À placer dans : _includes/footer_custom.html -->
+<style>
+  /* Bouton "lien hypertexte" : même police que le thème, bleu, sans soulignement */
+  #btn-switch-xp {
+    font: inherit; font-size: 0.75rem; line-height: 1.4;
+    color: #7253ed; /* couleur des liens du thème : changez-la ici si besoin */
+    background: none; border: 0; padding: 0; margin: 0;
+    text-decoration: none; cursor: pointer; box-shadow: none; border-radius: 0;
+    /* repli si la barre latérale est introuvable */
+    position: fixed; bottom: 15px; left: 15px; z-index: 999999;
+  }
+  #btn-switch-xp:hover { opacity: .75; text-decoration: none; }
+  #btn-switch-xp:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+
+  /* Placé DANS le pied de page du thème ("This site uses Just the Docs..."), tout en haut :
+     il hérite donc de sa position, de son alignement et de sa taille de texte, sur tout écran. */
+  #btn-switch-xp.in-footer {
+    position: static; display: block; margin: 0 0 6px 0;
+    font-size: inherit; text-align: left;
+  }
+  /* Repli : en bas de la barre latérale si le pied de page est introuvable */
+  #btn-switch-xp.in-sidebar { position: static; display: block; margin: 8px 2rem; }
+</style>
+
+<button id="btn-switch-xp" type="button" data-xp-enter>Mode Windows XP</button>
+<script>
+  (function () {
+    try {
+      var btn = document.getElementById('btn-switch-xp');
+      var foot = document.querySelector('.side-bar .site-footer') || document.querySelector('.site-footer');
+      var sb = document.querySelector('.side-bar');
+      if (btn && foot) { foot.insertBefore(btn, foot.firstChild); btn.classList.add('in-footer'); }
+      else if (btn && sb) { sb.appendChild(btn); btn.classList.add('in-sidebar'); }
+    } catch (e) {}
+  })();
+</script>
+
+<!-- Inerte tant que le mode XP n'est pas lancé. Les fenêtres sont créées par xp-mode.js -->
+<template id="xp-template">
+  <div id="xp-desktop-environment">
+
+    <!-- ICÔNES DU BUREAU -->
+    <div id="xp-desktop-icons">
+      <div class="xp-icon" data-xp-url="{{ '/' | relative_url }}" data-xp-pc title="Ce PC">
+        <span class="xp-icon-img" style="background-image: url('{{ "/assets/images/winxp/ico/computer.png" | relative_url }}');"></span>
+        <span class="xp-icon-label">Ce PC</span>
+      </div>
+    </div>
+
+    <!-- CORBEILLE (en bas à droite) -->
+    <div class="xp-icon" id="xp-recycle" title="Corbeille">
+      <span class="xp-icon-img" style="background-image: url('{{ "/assets/images/winxp/ico/recycle.png" | relative_url }}');"></span>
+      <span class="xp-icon-label">Corbeille</span>
+    </div>
+
+    <div id="xp-windows"></div>
+
+    <!-- ÉCRAN DE VEILLE (noir, un clic le rallume) -->
+    <div id="xp-standby-screen"></div>
+
+    <!-- ÉCRAN NOIR (affiché juste avant l'écran de démarrage lors d'un redémarrage) -->
+    <div id="xp-black-screen"></div>
+
+    <!-- ÉCRAN DE DÉMARRAGE (affiché pendant un redémarrage) -->
+    <div id="xp-boot-screen">
+      <div class="xp-boot-top"></div>
+      <div class="xp-boot-mid">
+        <div class="xp-boot-logo">
+          <span class="xp-boot-flag" style="background-image: url('{{ "/assets/images/winxp/ico/win-flag.png" | relative_url }}');"></span>
+          <span class="xp-boot-ms">Microsoft<sup>®</sup></span>
+          <span class="xp-boot-win">Windows<sup>xp</sup></span>
+        </div>
+        <div class="xp-boot-text">Windows est en cours de démarrage...</div>
+      </div>
+      <div class="xp-boot-bottom"></div>
+    </div>
+
+    <!-- ÉCRAN BLEU (lancé par le bouton Test de "Informations système") -->
+    <div id="xp-bsod-screen">
+      <p>Un problème a été détecté et Windows a été arrêté pour éviter d'endommager votre ordinateur.</p>
+      <p>MANUALLY_INITIATED_CRASH</p>
+      <p>Si c'est la première fois que vous voyez cet écran d'erreur d'arrêt, redémarrez votre ordinateur. Si cet écran apparaît de nouveau, suivez les étapes suivantes :</p>
+      <p>Vérifiez que tout nouveau matériel ou logiciel est correctement installé. S'il s'agit d'une nouvelle installation, contactez votre fabricant de matériel ou de logiciel pour obtenir les mises à jour Windows dont vous pourriez avoir besoin.</p>
+      <p>Informations techniques :</p>
+      <p>*** STOP : 0x000000E2 (0x00000000, 0x00000000, 0x00000000, 0x00000000)</p>
+      <p class="xp-bsod-hint">Cliquez ou appuyez sur une touche pour redémarrer.</p>
+    </div>
+
+    <!-- ÉCRAN D'EXTINCTION STYLE WINDOWS XP AVEC EFFET SACCADÉ PROGRESSIF -->
+    <div id="xp-shutdown-overlay">
+      <div id="xp-shutdown-box">
+        <div class="shutdown-title-bar">
+          <span class="shutdown-title-text">Éteindre l'ordinateur</span>
+          <div class="xp-flag-icon" style="background-image: url('{{ "/assets/images/winxp/ico/win-flag.png" | relative_url }}');"></div>
+        </div>
+        <div class="shutdown-body">
+          <div class="shutdown-actions">
+            <button type="button" class="shutdown-btn" data-xp-standby>
+              <span class="shutdown-ico" style="background-image: url('{{ "/assets/images/winxp/ico/standby.png" | relative_url }}');"></span>
+              <span>Mettre en veille</span>
+            </button>
+            <button type="button" class="shutdown-btn" data-xp-poweroff>
+              <span class="shutdown-ico" style="background-image: url('{{ "/assets/images/winxp/ico/turnoff.png" | relative_url }}');"></span>
+              <span>Arrêter</span>
+            </button>
+            <button type="button" class="shutdown-btn" data-xp-restart>
+              <span class="shutdown-ico" style="background-image: url('{{ "/assets/images/winxp/ico/restart.png" | relative_url }}');"></span>
+              <span>Redémarrer</span>
+            </button>
+          </div>
+          <div class="shutdown-footer">
+            <button type="button" class="shutdown-cancel-btn" data-xp-cancel-shutdown>Annuler</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MENU DÉMARRER -->
+    <div id="xp-start-menu">
+      <div id="xp-start-header">
+        <div id="xp-start-avatar" style="background-image: url('{{ "/assets/images/winxp/ico/user-avatar.png" | relative_url }}');"></div>
+        <span id="xp-start-username">Doc Projet</span>
+      </div>
+
+      <div id="xp-start-body">
+        <div class="start-col-left">
+          <ul id="xp-left-menu-list">
+            <li>
+              <a href="{{ '/' | relative_url }}">
+                <span class="xp-start-ico" style="background-image: url('{{ "/assets/images/winxp/ico/computer.png" | relative_url }}');"></span>
+                <div class="xp-start-text">
+                  <strong>Accueil</strong>
+                  <span>Page principale</span>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="{{ '/objectifs.html' | relative_url }}">
+                <span class="xp-start-ico" style="background-image: url('{{ "/assets/images/winxp/ico/folder.png" | relative_url }}');"></span>
+                <div class="xp-start-text">
+                  <strong>Objectifs du projet</strong>
+                  <span>Présentation & buts</span>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="{{ '/equipe.html' | relative_url }}">
+                <span class="xp-start-ico" style="background-image: url('{{ "/assets/images/winxp/ico/folder.png" | relative_url }}');"></span>
+                <div class="xp-start-text">
+                  <strong>Équipe et rôles</strong>
+                  <span>Membres du groupe</span>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="{{ '/etudes.html' | relative_url }}">
+                <span class="xp-start-ico" style="background-image: url('{{ "/assets/images/winxp/ico/folder.png" | relative_url }}');"></span>
+                <div class="xp-start-text">
+                  <strong>Études techniques</strong>
+                  <span>Choix & recherches</span>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="{{ '/conception/' | relative_url }}">
+                <span class="xp-start-ico" style="background-image: url('{{ "/assets/images/winxp/ico/folder.png" | relative_url }}');"></span>
+                <div class="xp-start-text">
+                  <strong>Conception</strong>
+                  <span>CAO, PCB & Code</span>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="{{ '/fabrication/' | relative_url }}">
+                <span class="xp-start-ico" style="background-image: url('{{ "/assets/images/winxp/ico/folder.png" | relative_url }}');"></span>
+                <div class="xp-start-text">
+                  <strong>Fabrication</strong>
+                  <span>Assemblage & étapes</span>
+                </div>
+              </a>
+            </li>
+          </ul>
+
+          <!-- Bouton Tous les programmes -->
+          <div class="start-all-programs" id="xp-toggle-programs-btn">
+            <a href="#">
+              <span id="xp-programs-btn-text">Tous les programmes</span>
+              <div class="xp-all-programs-arrow" id="xp-programs-arrow"></div>
+            </a>
+          </div>
+        </div>
+
+        <div class="start-col-right">
+          <ul>
+            <li>
+              <a href="{{ '/tests.html' | relative_url }}">
+                <span class="xp-start-ico" style="background-image: url('{{ "/assets/images/winxp/ico/tests.png" | relative_url }}');"></span>
+                <span>Tests & Résultats</span>
+              </a>
+            </li>
+            <li>
+              <a href="{{ '/journal/' | relative_url }}">
+                <span class="xp-start-ico" style="background-image: url('{{ "/assets/images/winxp/ico/journal.png" | relative_url }}');"></span>
+                <span>Journal de bord</span>
+              </a>
+            </li>
+            <li class="start-divider"></li>
+            <li>
+              <a href="#" data-xp-app="cpanel">
+                <span class="xp-start-ico" style="background-image: url('{{ "/assets/images/winxp/ico/cpanel.png" | relative_url }}');"></span>
+                <span>Panneau de configuration</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" data-xp-app="sysinfo">
+                <span class="xp-start-ico" style="background-image: url('{{ "/assets/images/winxp/ico/sysinfo.png" | relative_url }}');"></span>
+                <span>Informations système</span>
+              </a>
+            </li>
+            <li class="start-divider"></li>
+            <li>
+              <a href="https://github.com/Makerspace-Amiens-2026-27/MachineThatDraws2627-Groupe06" target="_blank" rel="noopener">
+                <span class="xp-start-ico" style="background-image: url('{{ "/assets/images/winxp/ico/github.png" | relative_url }}');"></span>
+                <span>GitHub Repo ↗</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" data-xp-app="search">
+                <span class="xp-start-ico" style="background-image: url('{{ "/assets/images/winxp/ico/search.png" | relative_url }}');"></span>
+                <span>Rechercher</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="xp-start-footer">
+        <button type="button" class="xp-btn-footer" data-xp-shutdown-trigger>
+          <span class="xp-start-ico" style="background-image: url('{{ "/assets/images/winxp/ico/shutdown.png" | relative_url }}');"></span>
+          <span>Éteindre / Quitter le mode XP</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- BARRE DES TÂCHES -->
+    <div id="xp-taskbar">
+      <button type="button" id="xp-start-btn" data-xp-start>
+        <span class="xp-flag-icon" style="background-image: url('{{ "/assets/images/winxp/ico/win-flag.png" | relative_url }}');"></span>
+        <span>démarrer</span>
+      </button>
+      <div id="xp-task-tabs"></div>
+
+      <!-- Horloge XP -->
+      <div id="xp-tray-clock">00:00</div>
+    </div>
+
+  </div>
+</template>
+
+<script src="{{ '/assets/js/xp-mode.js' | relative_url }}"
+        data-css="{{ '/assets/css/winxp.css' | relative_url }}"
+        data-search="{{ '/assets/js/search-data.json' | relative_url }}"
+        data-home="{{ '/' | relative_url }}" defer></script>
