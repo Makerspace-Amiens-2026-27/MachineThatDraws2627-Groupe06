@@ -15,7 +15,7 @@ Ce journal retrace mon parcours, mes contributions techniques et le travail réa
 ## 👤 À propos
 
 * **Nom :** Louis DUBRAY
-* **Rôle dans l'équipe :** Étudiant ingénieur — Gestion du dépôt GitHub, développement & intégration
+* **Rôle dans l'équipe :** Étudiant ingénieur 
 * **Projet :** Machine That Draws (Groupe 06)
 
 ---
