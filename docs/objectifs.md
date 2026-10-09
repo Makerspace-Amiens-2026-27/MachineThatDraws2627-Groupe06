@@ -6,10 +6,7 @@ title: Objectifs du projet
 
 # Objectifs du projet
 
-{: .a_supprimer }
-> Cette page pose le besoin **avant** toute solution technique : on y dit *quoi*
-> faire, pas *comment*. Répondez aux questions de chaque section, puis supprimez-les.
-> Voir [Définir son besoin et son cahier des charges](https://doc.makerspace-amiens.fr/workshops/methodologie-de-projet/concepts/definir-son-besoin/).
+
 
 ## Contexte
 
@@ -23,11 +20,6 @@ title: Objectifs du projet
 
 ## Cahier des charges
 
-{: .a_modifier }
-> Listez les fonctions attendues avec des critères **mesurables** :
-> **FP** pour une fonction principale (ce que le projet doit faire),
-> **FC** pour une fonction contrainte (ce à quoi il doit s'adapter).
-> Flexibilité : de F0 (impératif) à F3 (négociable). Exemple :
 
 ### Fonctions principales
 
@@ -38,8 +30,6 @@ title: Objectifs du projet
 | FP3 : Tracer sans aide | Intervention pendant un tracé | aucune | F0 |
 | FP4 : Se présenter au public | Durée d'un tracé de démo | ≤ 5 min | F2 |
 
-#### Flexibilité : de F0 (impératif) à F3 (négociable).
-
 ### Fonctions Contraintes
 
 | Fonction | Critère | Niveau attendu | Flexibilité |
@@ -49,5 +39,3 @@ title: Objectifs du projet
 | FC3 : Fabriquer au MakerSpace | Procédés | Machines et outils du lieu | F1 |
 | FC4 : Tenir le calendrier | Proof of concept | Fonctionnel fin du S1 | F0 |
 | FC5 : Sécurité du public | Pièces en mouvement | aucun pincement possible | F0 |
-
-#### Flexibilité : de F0 (impératif) à F3 (négociable).
