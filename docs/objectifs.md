@@ -10,13 +10,19 @@ title: Objectifs du projet
 
 ## Contexte
 
-{: .a_modifier }
-> D'où vient le projet ? Qui l'a demandé ? Dans quel cadre (cours, concours, commande) ?
+- Ce projet s'inscrit dans le cadre de notre deuxième année de formation. Il répond à une demande du makerspace de l'école, qui souhaite disposer d'un projet à la fois technique et démonstratif. Il nous permet de passer de la théorie vue en cours à la pratique : conception mécanique, électronique, programmation et fabrication.
+
+- L'objectif est de concevoir une machine capable de réaliser automatiquement un dessin sur papier à partir d'un fichier numérique, sans aucune intervention humaine pendant le tracé. L'utilisateur choisit un fichier, lance l'opération, puis la machine exécute seule l'ensemble du dessin.
 
 ## Problème et public cible
 
-{: .a_modifier }
-> Quel problème cherchez-vous à résoudre ? Pour qui ? Dans quelles conditions d'utilisation ?
+- La machine est destinée aux visiteurs des journées portes ouvertes de l'école. Elle servira à présenter concrètement les projets menés au sein de l'établissement et à montrer comment ils permettent de développer des compétences techniques et de passer de la théorie à la pratique.
+
+Pour répondre à ce public, la machine doit être :
+
+- **facile d'utilisation** : aucune connaissance technique n'est nécessaire pour la faire fonctionner ;
+- **intuitive** : les étapes de prise en main sont simples et immédiatement compréhensibles ;
+- **spectaculaire et fiable** : le tracé doit être visible, rapide et réussi à chaque démonstration, afin de capter l'attention des visiteurs.
 
 ## Cahier des charges
 
