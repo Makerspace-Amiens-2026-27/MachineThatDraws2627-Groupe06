@@ -296,7 +296,9 @@
   function pageTitle(doc) {
     var h = doc.querySelector(SELECTOR + ' h1');
     var t = (h ? h.textContent : doc.title) || 'Page';
-    return t.replace(/\s+/g, ' ').trim();
+    // On retire les émojis du titre (ex. "📖 Journal de bord") : seule l'icône des assets reste dans la barre de titre
+    t = t.replace(/[\p{Extended_Pictographic}️‍]/gu, '');
+    return t.replace(/\s+/g, ' ').trim() || 'Page';
   }
 
   function absolutize(root, base) {
@@ -328,7 +330,12 @@
   }
 
   function typeset(w) {
-    try { if (window.MathJax && window.MathJax.typesetPromise) window.MathJax.typesetPromise([w.body]); } catch (e) {}
+    try {
+      var M = window.MathJax;
+      if (!M) return;                     // MathJax pas encore chargé : il traitera la page lui-même
+      var go = function () { if (M.typesetPromise) M.typesetPromise([w.body]).catch(function () {}); };
+      if (M.startup && M.startup.promise) M.startup.promise.then(go); else go();
+    } catch (e) {}
   }
 
   function scrollToHash(w, hash) {
