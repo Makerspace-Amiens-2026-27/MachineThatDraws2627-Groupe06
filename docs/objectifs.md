@@ -30,6 +30,8 @@ title: Objectifs du projet
 | FP3 : Tracer sans aide | Intervention pendant un tracé | aucune | F0 |
 | FP4 : Se présenter au public | Durée d'un tracé de démo | ≤ 5 min | F2 |
 
+#### Flexibilité : de F0 (impératif) à F3 (négociable).
+
 ### Fonctions Contraintes
 
 | Fonction | Critère | Niveau attendu | Flexibilité |
@@ -39,3 +41,5 @@ title: Objectifs du projet
 | FC3 : Fabriquer au MakerSpace | Procédés | Machines et outils du lieu | F1 |
 | FC4 : Tenir le calendrier | Proof of concept | Fonctionnel fin du S1 | F0 |
 | FC5 : Sécurité du public | Pièces en mouvement | aucun pincement possible | F0 |
+
+#### Flexibilité : de F0 (impératif) à F3 (négociable).
