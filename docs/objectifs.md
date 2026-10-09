@@ -36,7 +36,7 @@ title: Objectifs du projet
 | FP1 : Taille du dessin | Surface de dessin suffisante | > A4 | F1 |
 | FP2 : Tracer un dessin | Écart sur un carré de 10mm | ≤ 1mm par coté | F1 |
 | FP3 : Tracer sans aide | Intervention pendant un tracé | aucune | F0 |
-| FP4 : Se présenter au public | Durée d'ub tracé de démo | ≤ 5 min | F2 |
+| FP4 : Se présenter au public | Durée d'un tracé de démo | ≤ 5 min | F2 |
 
 ### Fonctions Contraintes
 
