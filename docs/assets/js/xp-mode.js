@@ -12,8 +12,15 @@
   var DEFAULTS = { multitask: false, keepState: true, theme: 'xp' };
   // Préfixe du site (baseurl) déduit de l'adresse de ce script : fonctionne aussi pour un site de projet GitHub Pages
   var SITE_BASE = (function () {
-    try { return new URL(script.src).pathname.replace(/\/assets\/js\/[^\/]*$/, ''); } catch (e) { return ''; }
+    try {
+      // 1) data-home vaut "{{ '/' | relative_url }}" : c'est exactement le baseurl du site
+      var h = script && script.getAttribute('data-home');
+      if (h) return new URL(h, location.href).pathname.replace(/\/+$/, '');
+      // 2) à défaut, on le déduit de l'adresse de ce script
+      return new URL(script.src).pathname.replace(/\/assets\/js\/[^\/]*$/, '');
+    } catch (e) { return ''; }
   })();
+  window.XP_MODE_INFO = { version: 5, base: SITE_BASE };   // pour vérifier dans la console quelle version est chargée
   function sitePath(p) { return location.origin + SITE_BASE + p; }
   function assetIco(name) { return sitePath('/assets/images/winxp/ico/' + name + '.png'); }
   var AUTHOR = 'Jan Klod';          // nom affiché dans l'app "Informations système"
