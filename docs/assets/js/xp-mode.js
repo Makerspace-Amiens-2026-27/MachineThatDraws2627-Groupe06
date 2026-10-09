@@ -10,6 +10,12 @@
   var K_CFG = 'xp_config';
   var K_SES = 'xp_session';
   var DEFAULTS = { multitask: false, keepState: true, theme: 'xp' };
+  // Préfixe du site (baseurl) déduit de l'adresse de ce script : fonctionne aussi pour un site de projet GitHub Pages
+  var SITE_BASE = (function () {
+    try { return new URL(script.src).pathname.replace(/\/assets\/js\/[^\/]*$/, ''); } catch (e) { return ''; }
+  })();
+  function sitePath(p) { return location.origin + SITE_BASE + p; }
+  function assetIco(name) { return sitePath('/assets/images/winxp/ico/' + name + '.png'); }
   var AUTHOR = 'Jan Klod';          // nom affiché dans l'app "Informations système"
   var SEARCH_URL = (script && script.getAttribute('data-search')) || '/assets/js/search-data.json';
   var searchData = null, searchLoading = null;
@@ -32,13 +38,13 @@
     if (cleanUrl.indexOf('/journal') !== -1) return 'xp-ico-journal';
     if (cleanUrl.indexOf('/tests') !== -1) return 'xp-ico-tests';
     if (cleanUrl.indexOf('/github') !== -1) return 'xp-ico-github';
-    if (cleanUrl === clean(location.origin + '/')) return 'xp-ico-computer';
+    if (cleanUrl === clean(sitePath('/'))) return 'xp-ico-computer';
     return 'xp-ico-folder';
   }
 
   function iconUrl(w) {
     var name = getIconClass(w.type, w.url).replace('xp-ico-', '');
-    return new URL('/assets/images/winxp/ico/' + name + '.png', location.href).href;
+    return assetIco(name);
   }
 
   function loadCfg() {
@@ -412,7 +418,7 @@
       '<p class="cp-hint">' + hint + '</p>';
   }
   function cat(view, iconName, label) {
-    var icoUrl = new URL('/assets/images/winxp/ico/' + iconName + '.png', location.href).href;
+    var icoUrl = assetIco(iconName);
     return '<a href="#" class="cp-cat" data-cp-view="' + view + '"><span class="cp-ico" style="background-image: url(\'' + icoUrl + '\');"></span><span>' + label + '</span></a>';
   }
 
@@ -482,7 +488,7 @@
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
   function icoPng(name) {
-    return new URL('/assets/images/winxp/ico/' + name + '.png', location.href).href;
+    return assetIco(name);
   }
 
   function loadSearchData() {
@@ -668,6 +674,11 @@
     return w;
   }
 
+  function progItem(path, ico, title, sub) {
+    return '<li><a href="' + sitePath(path) + '"><span class="xp-start-ico" style="background-image: url(\'' + assetIco(ico) +
+      '\');"></span><div class="xp-start-text"><strong>' + title + '</strong><span>' + sub + '</span></div></a></li>';
+  }
+
   function toggleProgramsView() {
     showPrograms = !showPrograms;
     var listEl = document.getElementById('xp-left-menu-list');
@@ -679,15 +690,16 @@
       if (!mainProgramsHtml) mainProgramsHtml = listEl.innerHTML;
       if (btnText) btnText.textContent = 'Retour';
       if (arrow) arrow.classList.add('back');
-      listEl.innerHTML =
-        '<li><a href="' + location.origin + '/"><span class="xp-start-ico" style="background-image: url(\'' + new URL('/assets/images/winxp/ico/computer.png', location.href).href + '\');"></span><div class="xp-start-text"><strong>Accueil</strong><span>Principal</span></div></a></li>' +
-        '<li><a href="' + location.origin + '/objectifs.html"><span class="xp-start-ico" style="background-image: url(\'' + new URL('/assets/images/winxp/ico/folder.png', location.href).href + '\');"></span><div class="xp-start-text"><strong>Objectifs</strong><span>Buts du projet</span></div></a></li>' +
-        '<li><a href="' + location.origin + '/equipe.html"><span class="xp-start-ico" style="background-image: url(\'' + new URL('/assets/images/winxp/ico/folder.png', location.href).href + '\');"></span><div class="xp-start-text"><strong>Équipe</strong><span>Membres</span></div></a></li>' +
-        '<li><a href="' + location.origin + '/etudes.html"><span class="xp-start-ico" style="background-image: url(\'' + new URL('/assets/images/winxp/ico/folder.png', location.href).href + '\');"></span><div class="xp-start-text"><strong>Études</strong><span>Recherches</span></div></a></li>' +
-        '<li><a href="' + location.origin + '/conception/"><span class="xp-start-ico" style="background-image: url(\'' + new URL('/assets/images/winxp/ico/folder.png', location.href).href + '\');"></span><div class="xp-start-text"><strong>Conception</strong><span>CAO & Code</span></div></a></li>' +
-        '<li><a href="' + location.origin + '/fabrication/"><span class="xp-start-ico" style="background-image: url(\'' + new URL('/assets/images/winxp/ico/folder.png', location.href).href + '\');"></span><div class="xp-start-text"><strong>Fabrication</strong><span>Assemblage</span></div></a></li>' +
-        '<li><a href="' + location.origin + '/tests.html"><span class="xp-start-ico" style="background-image: url(\'' + new URL('/assets/images/winxp/ico/tests.png', location.href).href + '\');"></span><div class="xp-start-text"><strong>Tests</strong><span>Résultats</span></div></a></li>' +
-        '<li><a href="' + location.origin + '/journal/"><span class="xp-start-ico" style="background-image: url(\'' + new URL('/assets/images/winxp/ico/journal.png', location.href).href + '\');"></span><div class="xp-start-text"><strong>Journal</strong><span>Suivi</span></div></a></li>';
+      listEl.innerHTML = [
+        progItem('/', 'computer', 'Accueil', 'Principal'),
+        progItem('/objectifs.html', 'folder', 'Objectifs', 'Buts du projet'),
+        progItem('/equipe.html', 'folder', 'Équipe', 'Membres'),
+        progItem('/etudes.html', 'folder', 'Études', 'Recherches'),
+        progItem('/conception/', 'folder', 'Conception', 'CAO & Code'),
+        progItem('/fabrication/', 'folder', 'Fabrication', 'Assemblage'),
+        progItem('/tests.html', 'tests', 'Tests', 'Résultats'),
+        progItem('/journal/', 'journal', 'Journal', 'Suivi')
+      ].join('');
     } else {
       if (btnText) btnText.textContent = 'Tous les programmes';
       if (arrow) arrow.classList.remove('back');
