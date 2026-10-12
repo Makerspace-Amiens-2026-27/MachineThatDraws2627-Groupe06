@@ -23,6 +23,8 @@
   window.XP_MODE_INFO = { version: 6, base: SITE_BASE };   // pour vérifier dans la console quelle version est chargée
   function sitePath(p) { return location.origin + SITE_BASE + p; }
   function assetIco(name) { return sitePath('/assets/images/winxp/ico/' + name + '.png'); }
+  document.documentElement.style.setProperty('--xp-ico-volume', "url('" + assetIco('volume') + "')");
+  document.documentElement.style.setProperty('--xp-ico-volume-off', "url('" + assetIco('volume-muted') + "')");
   var AUTHOR = 'Jan Klod';          // nom affiché dans l'app "Informations système"
   var SEARCH_URL = (script && script.getAttribute('data-search')) || '/assets/js/search-data.json';
   var searchData = null, searchLoading = null;
@@ -57,7 +59,7 @@
   }
 
   function iconUrl(w) {
-    if (w.type === 'notepad') return NOTE_ICON;
+    if (w.type === 'notepad') return assetIco('notepad');
     var name = getIconClass(w.type, w.url).replace('xp-ico-', '');
     return assetIco(name);
   }
@@ -341,7 +343,11 @@
     try {
       var M = window.MathJax;
       if (!M) return;                     // MathJax pas encore chargé : il traitera la page lui-même
-      var go = function () { if (M.typesetPromise) M.typesetPromise([w.body]).catch(function () {}); };
+      var tries = 0;
+      var go = function () {
+        if (M.typesetPromise) { M.typesetPromise([w.body]).catch(function () {}); return; }
+        if (++tries < 40) setTimeout(go, 500);      // MathJax est encore en train de se charger
+      };
       if (M.startup && M.startup.promise) M.startup.promise.then(go); else go();
     } catch (e) {}
   }
@@ -479,7 +485,7 @@
       body = '<h2 class="cp-h">Choisissez une catégorie</h2><div class="cp-cats">' +
         cat('appearance', 'theme', 'Apparence et thèmes') +
         cat('windows', 'multitask', 'Fenêtres et multitâche') +
-        cat('sound', SPK_BIG, 'Son et périphériques audio') + '</div>';
+        cat('sound', 'sound', 'Son et périphériques audio') + '</div>';
     }
     if (view !== 'home') {
       body += '<p class="cp-actions"><button type="button" data-cp-view="home">&lt; Retour</button> ' +
@@ -777,20 +783,6 @@
   }
 
   /* ===================== Session : déconnexion, changement d'utilisateur, connexion ===================== */
-  var SPK_BIG = 'data:image/svg+xml,' + encodeURIComponent(
-    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">' +
-    '<path d="M6 18h9l11-9v30l-11-9H6z" fill="#3b78d8" stroke="#1b3f91" stroke-width="2" stroke-linejoin="round"/>' +
-    '<path d="M32 17c3.5 4 3.5 10 0 14M37 11c6 6.5 6 19.5 0 26" fill="none" stroke="#1b3f91" stroke-width="3" stroke-linecap="round"/></svg>');
-  var ICON_SWITCH = 'data:image/svg+xml,' + encodeURIComponent(
-    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">' +
-    '<rect x="1" y="1" width="30" height="30" rx="5" fill="#3a9a3a" stroke="#fff" stroke-width="2"/>' +
-    '<circle cx="12" cy="12" r="4" fill="#fff"/><path d="M5 25c0-5 3-8 7-8s7 3 7 8z" fill="#fff"/>' +
-    '<circle cx="21" cy="14" r="3.5" fill="#d9f2d9"/><path d="M15 27c0-4 2.5-7 6-7s6 3 6 7z" fill="#d9f2d9"/></svg>');
-  var ICON_LOGOFF = 'data:image/svg+xml,' + encodeURIComponent(
-    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">' +
-    '<rect x="1" y="1" width="30" height="30" rx="5" fill="#e8a317" stroke="#fff" stroke-width="2"/>' +
-    '<circle cx="12" cy="11" r="4.5" fill="#fff"/><path d="M4 26c0-6 3.5-9 8-9s8 3 8 9z" fill="#fff"/>' +
-    '<path d="M21 14h7M25 10l4 4-4 4" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>');
 
   var SOUND_LIST = [
     ['startup', 'Démarrage de Windows'], ['shutdown', 'Arrêt de Windows'],
@@ -813,9 +805,9 @@
       title.textContent = 'Se déconnecter de Windows';
       actions.innerHTML =
         '<button type="button" class="shutdown-btn" data-xp-switch-user>' +
-          '<span class="shutdown-ico" style="background-image:url(\'' + ICON_SWITCH + '\')"></span><span>Changer d\'utilisateur</span></button>' +
+          '<span class="shutdown-ico" style="background-image:url(\'' + assetIco('switch-user') + '\')"></span><span>Changer d\'utilisateur</span></button>' +
         '<button type="button" class="shutdown-btn" data-xp-logoff>' +
-          '<span class="shutdown-ico" style="background-image:url(\'' + ICON_LOGOFF + '\')"></span><span>Se déconnecter</span></button>';
+          '<span class="shutdown-ico" style="background-image:url(\'' + assetIco('logoff') + '\')"></span><span>Se déconnecter</span></button>';
     } else {
       title.textContent = 'Éteindre l\'ordinateur';
       actions.innerHTML = powerOffHtml;
@@ -926,12 +918,6 @@
   /* ===================== Boîtes de dialogue, Exécuter, Bloc-notes ===================== */
   var K_FILES = 'xp_files';          // fichiers enregistrés sur le bureau (temporaires : sessionStorage)
   var BUSH_GLITCH = '畂桳栠摩琠敨映捡獴';   // ce que Bloc-notes affichait pour "Bush hid the facts"
-  var NOTE_ICON = 'data:image/svg+xml,' + encodeURIComponent(
-    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">' +
-    '<rect x="6" y="5" width="20" height="25" rx="2" fill="#fff" stroke="#3b6fc2" stroke-width="1.5"/>' +
-    '<rect x="6" y="5" width="20" height="6" rx="2" fill="#3b6fc2"/>' +
-    '<path d="M10 16h12M10 20h12M10 24h8" stroke="#7b8fb5" stroke-width="1.5"/>' +
-    '<path d="M11 3v5M16 3v5M21 3v5" stroke="#555" stroke-width="2" stroke-linecap="round"/></svg>');
 
   function loadFiles() {
     try { return JSON.parse(sessionStorage.getItem(K_FILES)) || []; } catch (e) { return []; }
@@ -1025,7 +1011,8 @@
     });
     wrap.appendChild(win);
     env.appendChild(wrap);
-    playSound(o.icon === 'info' ? 'ding' : 'error');
+    if (o.icon === 'info') playSound('ding');
+    else if (o.icon === 'error' || o.icon === 'question') playSound('error');   // pas de son pour "Enregistrer sous" / "Ouvrir"
     setTimeout(function () {
       var f = input || list || first || win;
       f.focus();
@@ -1297,11 +1284,6 @@
   }
 
   /* ===================== Corbeille ===================== */
-  var SECRET_ICON = 'data:image/svg+xml,' + encodeURIComponent(
-    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">' +
-    '<path d="M7 2h13l6 6v22H7z" fill="#fff" stroke="#6b7a94" stroke-width="1.5"/>' +
-    '<path d="M20 2v6h6" fill="#dfe6f2" stroke="#6b7a94" stroke-width="1.5"/>' +
-    '<path d="M11 14h11M11 18h11M11 22h8" stroke="#9aa9c4" stroke-width="1.5"/></svg>');
   var RB_DATE = (function () {
     var d = new Date();
     function p(n) { return (n < 10 ? '0' : '') + n; }
@@ -1323,7 +1305,7 @@
       ic.className = 'xp-icon';
       ic.setAttribute(attr, val);
       ic.title = name;
-      ic.innerHTML = '<span class="xp-icon-img" style="background-image:url(\'' + SECRET_ICON + '\')"></span>' +
+      ic.innerHTML = '<span class="xp-icon-img" style="background-image:url(\'' + assetIco('secret') + '\')"></span>' +
         '<span class="xp-icon-label"></span>';
       ic.querySelector('.xp-icon-label').textContent = name;
       box.appendChild(ic);
@@ -1374,7 +1356,7 @@
       : '<strong>Corbeille</strong><span>Dossier système</span>';
     var row = has
       ? '<tr class="rb-row' + (sel ? ' sel' : '') + '" data-rb-row>' +
-        '<td><span class="rb-ico" style="background-image:url(\'' + SECRET_ICON + '\')"></span>secret</td>' +
+        '<td><span class="rb-ico" style="background-image:url(\'' + assetIco('secret') + '\')"></span>secret</td>' +
         '<td>C:\\Documents and Settings\\Doc Projet\\Bureau</td><td>' + RB_DATE + '</td><td>1 Ko</td><td>Fichier</td><td>' + RB_DATE + '</td></tr>'
       : '';
     w.body.innerHTML =
