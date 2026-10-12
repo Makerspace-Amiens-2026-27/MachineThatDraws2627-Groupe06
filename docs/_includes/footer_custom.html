@@ -86,6 +86,57 @@
       <p class="xp-bsod-hint">Cliquez ou appuyez sur une touche pour redémarrer.</p>
     </div>
 
+    <!-- ÉCRAN DE CONNEXION (Luna = écran de bienvenue, Classique = boîte "Ouverture de session") -->
+    <div id="xp-login-screen">
+      <div class="lg-luna">
+        <div class="lg-top"></div>
+        <div class="lg-mid">
+          <div class="lg-left">
+            <div class="lg-logo">
+              <span class="lg-flag" style="background-image: url('{{ "/assets/images/winxp/ico/win-flag.png" | relative_url }}');"></span>
+              <span class="lg-ms">Microsoft<sup>®</sup></span>
+              <span class="lg-win">Windows<sup>xp</sup></span>
+            </div>
+            <div class="lg-hint">Pour commencer, cliquez sur votre nom d'utilisateur</div>
+          </div>
+          <div class="lg-right">
+            <button type="button" class="lg-user" data-lg-user="xp">
+              <span class="lg-avatar" style="background-image: url('{{ "/assets/images/winxp/ico/user-avatar.png" | relative_url }}');"></span>
+              <span class="lg-uname"><strong>Windows XP</strong><span class="lg-status"></span></span>
+            </button>
+            <button type="button" class="lg-user" data-lg-user="normal">
+              <span class="lg-avatar lg-avatar-2" style="background-image: url('{{ "/assets/images/winxp/ico/user-avatar.png" | relative_url }}');"></span>
+              <span class="lg-uname"><strong>Site normal</strong></span>
+            </button>
+          </div>
+        </div>
+        <div class="lg-bottom">
+          <button type="button" class="lg-off" data-lg-turnoff><span class="lg-off-ico"></span><span>Arrêter l'ordinateur</span></button>
+          <span class="lg-bottom-txt">Après avoir ouvert votre session, vous pourrez revenir au site normal à tout moment.</span>
+        </div>
+      </div>
+
+      <div class="lg-classic">
+        <div class="lg-c-banner">
+          <span class="lg-c-ms">Microsoft<sup>®</sup></span>
+          <span class="lg-c-win">Windows<sup>xp</sup></span>
+          <span class="lg-c-ed">Professionnel</span>
+        </div>
+        <div class="lg-c-dlg window">
+          <div class="title-bar"><div class="title-bar-text">Ouverture de session</div></div>
+          <div class="window-body">
+            <p class="lg-c-note"></p>
+            <div class="lg-c-row"><label>Nom d'utilisateur :</label><input type="text" class="lg-c-user" value="Windows XP" autocomplete="off" spellcheck="false"></div>
+            <div class="lg-c-row"><label>Mot de passe :</label><input type="password" class="lg-c-pass" autocomplete="off"></div>
+            <div class="lg-c-btns">
+              <button type="button" data-lg-ok>OK</button>
+              <button type="button" data-lg-turnoff>Arrêter...</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- ÉCRAN D'EXTINCTION STYLE WINDOWS XP AVEC EFFET SACCADÉ PROGRESSIF -->
     <div id="xp-shutdown-overlay">
       <div id="xp-shutdown-box">
@@ -230,16 +281,33 @@
                 <span>Rechercher</span>
               </a>
             </li>
+            <li>
+              <a href="#" data-xp-app="run">
+                <span class="xp-start-ico" style="background-image: url('{{ "/assets/images/winxp/ico/run.png" | relative_url }}');"></span>
+                <span>Exécuter...</span>
+              </a>
+            </li>
           </ul>
         </div>
       </div>
 
       <div id="xp-start-footer">
+        <button type="button" class="xp-btn-footer" data-xp-logoff-trigger>
+          <span class="xp-start-ico" style="background-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20x%3D%221%22%20y%3D%221%22%20width%3D%2230%22%20height%3D%2230%22%20rx%3D%225%22%20fill%3D%22%23e8a317%22%20stroke%3D%22%23fff%22%20stroke-width%3D%222%22%2F%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2211%22%20r%3D%224.5%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M4%2026c0-6%203.5-9%208-9s8%203%208%209z%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M21%2014h7M25%2010l4%204-4%204%22%20stroke%3D%22%23fff%22%20stroke-width%3D%222.2%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E');"></span>
+          <span>Se déconnecter</span>
+        </button>
         <button type="button" class="xp-btn-footer" data-xp-shutdown-trigger>
           <span class="xp-start-ico" style="background-image: url('{{ "/assets/images/winxp/ico/shutdown.png" | relative_url }}');"></span>
           <span>Éteindre / Quitter le mode XP</span>
         </button>
       </div>
+    </div>
+
+    <!-- FENÊTRE VOLUME (ouverte par l'icône haut-parleur) -->
+    <div id="xp-volume-popup">
+      <div class="vol-title">Volume</div>
+      <div class="vol-slider"><input type="range" id="xp-volume-range" min="0" max="100" step="1" value="0" aria-label="Volume"></div>
+      <div class="field-row"><input type="checkbox" id="xp-volume-mute"><label for="xp-volume-mute">Muet</label></div>
     </div>
 
     <!-- BARRE DES TÂCHES -->
@@ -251,13 +319,16 @@
       <div id="xp-task-tabs"></div>
 
       <!-- Horloge XP -->
+      <!-- Icône de volume (clic : fenêtre Volume) -->
+      <button type="button" id="xp-tray-volume" data-xp-volume title="Volume"><span class="xp-vol-ico" style="background-image: url('{{ "/assets/images/winxp/ico/Volume.png" | relative_url }}');"></span></button>
+
       <div id="xp-tray-clock">00:00</div>
     </div>
 
   </div>
 </template>
 
-<script src="{{ '/assets/js/xp-mode.js' | relative_url }}?v=5"
-        data-css="{{ '/assets/css/winxp.css' | relative_url }}?v=5"
+<script src="{{ '/assets/js/xp-mode.js' | relative_url }}?v=6"
+        data-css="{{ '/assets/css/winxp.css' | relative_url }}?v=6"
         data-search="{{ '/assets/js/search-data.json' | relative_url }}"
         data-home="{{ '/' | relative_url }}" defer></script>

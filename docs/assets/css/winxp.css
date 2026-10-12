@@ -16,7 +16,7 @@ html.xp-on body {
 }
 
 /* Rendu universel des icônes pour forcer leur affichage */
-.xp-start-ico, .xp-win-title-ico, .xp-tab-ico, .xp-flag-icon, .cp-ico, .si-logo, .sr-ico, .sr-dog, .xp-icon-img, #xp-start-avatar, .shutdown-ico {
+.xp-start-ico, .xp-win-title-ico, .xp-tab-ico, .xp-flag-icon, .cp-ico, .si-logo, .sr-ico, .sr-dog, .rb-ico, .rn-ico, .xp-icon-img, #xp-start-avatar, .shutdown-ico {
   background-size: contain !important;
   background-repeat: no-repeat !important;
   background-position: center !important;
@@ -287,7 +287,7 @@ html.xp-on body {
 #xp-desktop-environment #xp-tray-clock {
   height: 100%;
   padding: 0 10px;
-  margin-left: auto;
+  margin-left: 0;
   display: flex !important;
   align-items: center;
   justify-content: center;
@@ -296,8 +296,6 @@ html.xp-on body {
   font-size: 11px;
   text-shadow: none;
   background: transparent;
-  border-left: 1px solid #123492;
-  box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.12);
   cursor: default;
   white-space: nowrap;
   flex: none;
@@ -482,6 +480,7 @@ html.xp-on body {
   padding: 6px 10px;
   display: flex;
   justify-content: flex-end;
+  gap: 18px;
   border-top: 1px solid #001ca8;
 }
 
@@ -878,7 +877,8 @@ html.xp-on body {
   left: calc(50vw - 360px);
   max-width: calc(100vw - 20px);
 }
-#xp-desktop-environment .sr {
+#xp-desktop-environment .sr,
+#xp-desktop-environment .rb {
   display: flex; flex-direction: column; height: 100%;
   font-family: "Tahoma", Verdana, sans-serif; font-size: 11px; color: #000; background: #fff;
 }
@@ -946,7 +946,209 @@ html.xp-on body {
 #xp-desktop-environment .sr-folder { width: 164px; flex: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 #xp-desktop-environment .sr-status { padding: 2px 6px; background: #ece9d8; border-top: 1px solid #aca899; }
 
+/* ========== CORBEILLE ========== */
+#xp-desktop-environment .xp-window.xp-app-recycle {
+  width: 720px;
+  height: 440px;
+  top: 90px;
+  left: calc(50vw - 330px);
+  max-width: calc(100vw - 20px);
+}
+#xp-desktop-environment .rb-side {
+  width: 200px; flex: none; padding: 12px 10px; overflow-y: auto;
+  background: linear-gradient(to bottom, #7ba2e7 0%, #6375d6 100%);
+}
+#xp-desktop-environment .rb-tasks { background: #d6dff7; padding: 4px 0; }
+#xp-desktop-environment .rb-tasks a,
+#xp-desktop-environment .rb-tasks span { display: block; padding: 4px 10px; color: #215dc6; text-decoration: none; cursor: default; }
+#xp-desktop-environment .rb-tasks a { cursor: pointer; }
+#xp-desktop-environment .rb-tasks a:hover { color: #428eff; text-decoration: underline; }
+#xp-desktop-environment .rb-tasks .rb-dis { color: #8a96b5; }
+#xp-desktop-environment .rb-details { background: #d6dff7; padding: 6px 10px; }
+#xp-desktop-environment .rb-details strong { display: block; color: #000; margin-bottom: 2px; }
+#xp-desktop-environment .rb-details span { display: block; color: #333; font-size: 10px; margin-bottom: 1px; }
+#xp-desktop-environment .rb-list { flex: 1; min-width: 0; overflow: auto; background: #fff; }
+#xp-desktop-environment .rb-table { border-collapse: collapse; width: 100%; font-size: 11px; font-family: "Tahoma", Verdana, sans-serif; }
+#xp-desktop-environment .rb-table th {
+  position: sticky; top: 0; text-align: left; font-weight: normal; white-space: nowrap;
+  padding: 3px 8px; background: linear-gradient(to bottom, #fff 0%, #ebeadb 100%);
+  border-right: 1px solid #d4d0c8; border-bottom: 1px solid #aca899;
+}
+#xp-desktop-environment .rb-table td { padding: 2px 8px; white-space: nowrap; color: #000; }
+#xp-desktop-environment .rb-table td:first-child { display: flex; align-items: center; gap: 4px; }
+#xp-desktop-environment .rb-ico { width: 16px; height: 16px; }
+#xp-desktop-environment .rb-row { cursor: default; }
+#xp-desktop-environment .rb-row.sel td { background: #316ac5; color: #fff; }
+
+/* ========== BOÎTES DE DIALOGUE XP ========== */
+#xp-desktop-environment .xp-modal {
+  position: fixed; inset: 0; z-index: 60000000;
+  display: flex; align-items: center; justify-content: center;
+}
+#xp-desktop-environment .xp-dialog {
+  position: relative; width: 380px; max-width: calc(100vw - 20px);
+  box-shadow: 4px 6px 16px rgba(0, 0, 0, 0.6);
+}
+#xp-desktop-environment .xp-dialog .window-body {
+  background: #ece9d8 !important; padding: 14px !important; margin: 3px !important;
+  color: #000; user-select: none; font-family: "Tahoma", Verdana, sans-serif; font-size: 11px;
+}
+#xp-desktop-environment .dlg-row { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 12px; }
+#xp-desktop-environment .dlg-text { flex: 1; white-space: pre-line; line-height: 1.4; }
+#xp-desktop-environment .dlg-icon {
+  flex: none; width: 32px; height: 32px; border-radius: 50%; color: #fff; text-align: center;
+  font: bold 22px/32px "Times New Roman", serif;
+}
+#xp-desktop-environment .dlg-error { background: #d9261c; }
+#xp-desktop-environment .dlg-error::before { content: "\00d7"; font-size: 28px; }
+#xp-desktop-environment .dlg-question { background: #2f6fd6; }
+#xp-desktop-environment .dlg-question::before { content: "?"; }
+#xp-desktop-environment .dlg-info { background: #2f6fd6; font-style: italic; }
+#xp-desktop-environment .dlg-info::before { content: "i"; }
+#xp-desktop-environment .dlg-extra { margin-bottom: 12px; }
+#xp-desktop-environment .dlg-extra label { display: block; margin-bottom: 3px; }
+#xp-desktop-environment .dlg-extra input { width: 100%; box-sizing: border-box; user-select: text; }
+#xp-desktop-environment .dlg-list { width: 100%; height: 110px; }
+#xp-desktop-environment .dlg-btns { display: flex; justify-content: flex-end; gap: 8px; }
+#xp-desktop-environment .dlg-btns button { min-width: 75px; }
+
+/* ========== EXÉCUTER ========== */
+#xp-desktop-environment .xp-window.xp-app-run {
+  width: 410px; height: 215px; top: auto; bottom: 48px; left: 10px; max-height: none;
+}
+#xp-desktop-environment .xp-app-run [data-xp-minimize],
+#xp-desktop-environment .xp-app-run [data-xp-maximize] { display: none; }
+#xp-desktop-environment .xp-app-run .window-body { background: #ece9d8 !important; }
+#xp-desktop-environment .rn {
+  display: flex; flex-direction: column; gap: 12px; height: 100%; box-sizing: border-box;
+  padding: 14px 16px 12px; font-family: "Tahoma", Verdana, sans-serif; font-size: 11px; color: #000;
+}
+#xp-desktop-environment .rn-top { display: flex; gap: 12px; align-items: flex-start; }
+#xp-desktop-environment .rn-top p { margin: 0; line-height: 1.4; }
+#xp-desktop-environment .rn-ico { width: 32px; height: 32px; }
+#xp-desktop-environment .rn-row { display: flex; align-items: center; gap: 10px; }
+#xp-desktop-environment .rn-combo { position: relative; flex: 1; display: flex; }
+#xp-desktop-environment .rn-input { flex: 1; height: 22px; box-sizing: border-box; padding-right: 22px; user-select: text; }
+#xp-desktop-environment .rn-arrow {
+  position: absolute; right: 2px; top: 2px; bottom: 2px; width: 17px; border-radius: 2px; pointer-events: none;
+  background: linear-gradient(#cfdcff, #8fa9e8); color: #233f86; text-align: center; font-size: 8px; line-height: 18px;
+}
+#xp-desktop-environment .rn-btns { display: flex; justify-content: flex-end; gap: 8px; margin-top: auto; }
+#xp-desktop-environment .rn-btns button { min-width: 75px; }
+
+/* ========== BLOC-NOTES ========== */
+#xp-desktop-environment .xp-window.xp-app-notepad { width: 640px; height: 420px; max-width: calc(100vw - 20px); }
+#xp-desktop-environment .xp-app-notepad .window-body { background: #ece9d8 !important; }
+#xp-desktop-environment .np {
+  --np-fs: 13px; --np-lh: 17px;
+  display: flex; flex-direction: column; height: 100%;
+  font-family: "Tahoma", Verdana, sans-serif; font-size: 11px; color: #000; background: #ece9d8;
+}
+#xp-desktop-environment .np-menubar { position: relative; display: flex; padding: 2px 4px; background: #ece9d8; border-bottom: 1px solid #d4d0c8; }
+#xp-desktop-environment .np-m { position: relative; padding: 2px 8px; cursor: default; }
+#xp-desktop-environment .np-m:hover,
+#xp-desktop-environment .np-m.open { background: #316ac5; color: #fff; }
+#xp-desktop-environment .np-dd {
+  display: none; position: absolute; top: 100%; left: 0; z-index: 60; min-width: 200px; padding: 2px;
+  background: #fff; color: #000; border: 1px solid #aca899; box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.35);
+}
+#xp-desktop-environment .np-m.open > .np-dd { display: block; }
+#xp-desktop-environment .np-it { display: flex; justify-content: space-between; gap: 24px; padding: 3px 22px 3px 22px; }
+#xp-desktop-environment .np-it em { font-style: normal; color: #666; }
+#xp-desktop-environment .np-it:hover { background: #316ac5; color: #fff; }
+#xp-desktop-environment .np-it:hover em { color: #dbe6fb; }
+#xp-desktop-environment .np-sep { height: 1px; margin: 3px 2px; background: #d4d0c8; }
+#xp-desktop-environment .np-toolbar {
+  display: flex; align-items: center; gap: 1px; padding: 3px 4px;
+  background: #ece9d8; border-bottom: 1px solid #aca899;
+}
+#xp-desktop-environment .np-btn {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 24px; height: 22px;
+  font-size: 14px; border: 1px solid transparent; border-radius: 3px; cursor: default; color: #1b3f91;
+}
+#xp-desktop-environment .np-btn:hover { border-color: #aca899; background: #f6f4ea; }
+#xp-desktop-environment .np-tsep { width: 1px; height: 18px; margin: 0 4px; background: #aca899; }
+#xp-desktop-environment .np-edit { flex: 1; min-height: 0; display: flex; background: #fff; border-top: 1px solid #fff; }
+#xp-desktop-environment .np-gutter {
+  flex: none; width: 46px; overflow: hidden; background: #ece9d8; border-right: 1px solid #c8c4b4;
+  font: var(--np-fs) / var(--np-lh) "Lucida Console", "Courier New", monospace; color: #4b6490; text-align: right;
+}
+#xp-desktop-environment .np-gutter-in { padding: 2px 6px 24px 0; white-space: nowrap; }
+#xp-desktop-environment .np-text {
+  flex: 1; min-width: 0; height: 100%; margin: 0 !important; box-sizing: border-box;
+  padding: 2px 4px !important; border: 0 !important; outline: none; resize: none; overflow: auto;
+  white-space: pre; background: #fff; color: #000; user-select: text;
+  font: var(--np-fs) / var(--np-lh) "Lucida Console", "Courier New", monospace !important;
+}
+#xp-desktop-environment .np-status { display: flex; background: #ece9d8; border-top: 1px solid #aca899; }
+#xp-desktop-environment .np-status span {
+  padding: 2px 8px; white-space: pre; border-right: 1px solid #aca899;
+}
+#xp-desktop-environment .np-status span:first-child { min-width: 150px; }
+#xp-desktop-environment .np-status span:nth-child(2) { min-width: 80px; }
+
+/* ========== VOLUME (icône de la barre des tâches + fenêtre "Volume") ========== */
+#xp-desktop-environment #xp-tray-volume {
+  height: 100%; margin: 0 0 0 auto; padding: 0 8px; min-width: 0 !important; flex: none;
+  display: flex; align-items: center; cursor: default;
+  border: 0; border-left: 1px solid #123492; border-radius: 0;
+  box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.12); background: transparent !important;
+}
+#xp-desktop-environment #xp-tray-volume:hover { background: rgba(255, 255, 255, 0.14) !important; }
+#xp-desktop-environment .xp-vol-ico {
+  display: inline-block; width: 16px; height: 16px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2 6h3l4-3v10l-4-3H2z' fill='%23fff' stroke='%239fb4e0' stroke-width='.6'/%3E%3Cpath d='M11 5.5c1.2 1.4 1.2 3.6 0 5M12.6 3.8c2.2 2.3 2.2 6.1 0 8.4' fill='none' stroke='%23fff' stroke-width='1.1' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+#xp-desktop-environment #xp-tray-volume.off .xp-vol-ico { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2 6h3l4-3v10l-4-3H2z' fill='%23fff' stroke='%239fb4e0' stroke-width='.6'/%3E%3Cpath d='M11 5l4 6M15 5l-4 6' stroke='%23e8362b' stroke-width='1.7' stroke-linecap='round'/%3E%3C/svg%3E"); }
+
+#xp-desktop-environment #xp-volume-popup {
+  display: none; position: fixed; bottom: 38px; left: 0; z-index: 100001; width: 74px;
+  padding: 7px 0 6px; text-align: center; box-sizing: border-box;
+  background: #ece9d8; color: #000; user-select: none;
+  font-family: "Tahoma", Verdana, sans-serif; font-size: 11px;
+  border: 1px solid; border-color: #ffffff #716f64 #716f64 #ffffff;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.45), inset -1px -1px 0 #aca899;
+}
+#xp-desktop-environment #xp-volume-popup.open { display: block; }
+#xp-desktop-environment .vol-title { margin-bottom: 6px; }
+#xp-desktop-environment .vol-slider { position: relative; width: 40px; height: 104px; margin: 0 auto 8px; }
+#xp-desktop-environment .vol-slider::before,
+#xp-desktop-environment .vol-slider::after {
+  content: ""; position: absolute; top: 4px; bottom: 4px; width: 5px;
+  background: repeating-linear-gradient(to bottom, #6d6d6d 0, #6d6d6d 1px, transparent 1px, transparent 10px);
+}
+#xp-desktop-environment .vol-slider::before { left: 1px; }
+#xp-desktop-environment .vol-slider::after { right: 1px; }
+#xp-desktop-environment #xp-volume-range {
+  position: absolute; left: 8px; top: 102px; width: 100px; height: 24px; margin: 0; padding: 0;
+  transform-origin: 0 0; transform: rotate(-90deg);
+  -webkit-appearance: none !important; appearance: none !important; background: transparent !important;
+  cursor: pointer; outline: none;
+}
+#xp-desktop-environment #xp-volume-range::-webkit-slider-runnable-track {
+  height: 4px; background: #fff; border: 1px solid #7f9db9; border-radius: 1px; box-shadow: inset 1px 1px 0 #aca899;
+}
+#xp-desktop-environment #xp-volume-range::-webkit-slider-thumb {
+  -webkit-appearance: none !important; appearance: none !important;
+  width: 11px !important; height: 20px !important; margin-top: -9px !important;
+  background: linear-gradient(to bottom, #fdfdfa, #d6d2c2) !important; background-image: linear-gradient(to bottom, #fdfdfa, #d6d2c2) !important;
+  border: 1px solid #7f9db9 !important; border-radius: 2px; box-shadow: none !important;
+}
+#xp-desktop-environment #xp-volume-range::-moz-range-track {
+  height: 4px; background: #fff; border: 1px solid #7f9db9; border-radius: 1px;
+}
+#xp-desktop-environment #xp-volume-range::-moz-range-thumb {
+  width: 9px; height: 18px; background: linear-gradient(to bottom, #fdfdfa, #d6d2c2);
+  border: 1px solid #7f9db9; border-radius: 2px; box-shadow: none;
+}
+#xp-desktop-environment #xp-volume-popup .field-row { justify-content: center; margin: 0; }
+
+/* Arrêt avec le son : la boîte "Éteindre l'ordinateur" disparaît, l'écran reste en noir et blanc */
+#xp-desktop-environment #xp-shutdown-overlay.xp-off #xp-shutdown-box { display: none; }
+
 /* ========== THÈME CLASSIQUE (Windows 98 / 2000) ========== */
+html.xp-classic #xp-desktop-environment .rb-side { background: #c0c0c0; }
+html.xp-classic #xp-desktop-environment .rb-row.sel td { background: #000080; }
 html.xp-classic #xp-desktop-environment .sr-pane { background: #c0c0c0; }
 html.xp-classic #xp-desktop-environment .sr-pane-title { background: linear-gradient(to right, #000080, #1084d0); color: #fff; }
 html.xp-classic #xp-desktop-environment .sr-bubble { background: #fff; }
@@ -1023,4 +1225,72 @@ html.xp-classic #xp-desktop-environment .si-head-text span { color: #ffffff; }
   box-sizing: border-box;
   border: 2px dashed #000000;
   outline: 1px dashed #ffffff;
+}
+
+
+/* ========== SON : liste de test ========== */
+#xp-desktop-environment .cp-snd-list { display: flex; flex-direction: column; gap: 4px; max-height: 230px; overflow: auto; }
+#xp-desktop-environment .cp-snd-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+#xp-desktop-environment .cp-snd-msg { min-height: 1.4em; margin: 6px 0 0; color: #a00; }
+
+/* ========== ÉCRAN DE CONNEXION ========== */
+#xp-desktop-environment #xp-login-screen {
+  display: none; position: fixed; inset: 0; z-index: 50000000;
+  font-family: "Trebuchet MS", "Segoe UI", Tahoma, sans-serif; user-select: none;
+}
+#xp-desktop-environment #xp-login-screen.active { display: block; }
+#xp-desktop-environment .lg-luna { display: flex; flex-direction: column; position: absolute; inset: 0; background: #5a7edc; color: #fff; }
+#xp-desktop-environment .lg-classic { display: none; position: absolute; inset: 0; background: #008080; font-family: Tahoma, Verdana, sans-serif; }
+html.xp-classic #xp-desktop-environment .lg-luna { display: none; }
+html.xp-classic #xp-desktop-environment .lg-classic { display: block; }
+
+#xp-desktop-environment .lg-top { height: 80px; background: #00309c; border-bottom: 2px solid; border-image: linear-gradient(to right, #00309c, #fff 50%, #00309c) 1; }
+#xp-desktop-environment .lg-bottom {
+  height: 90px; background: #00309c; border-top: 2px solid; border-image: linear-gradient(to right, #00309c, #f99736 50%, #00309c) 1;
+  display: flex; align-items: center; justify-content: space-between; padding: 0 30px; gap: 20px;
+}
+#xp-desktop-environment .lg-bottom-txt { font-size: 12px; max-width: 320px; text-align: right; opacity: .9; }
+#xp-desktop-environment .lg-off { background: none; border: none; color: #fff; font-size: 15px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+#xp-desktop-environment .lg-off:hover { text-decoration: underline; }
+#xp-desktop-environment .lg-off-ico { width: 28px; height: 28px; border-radius: 4px; background: #d6411f; border: 2px solid #fff; position: relative; }
+#xp-desktop-environment .lg-off-ico::after { content: ""; position: absolute; left: 50%; top: 4px; width: 2px; height: 9px; background: #fff; transform: translateX(-50%); }
+#xp-desktop-environment .lg-mid { flex: 1; display: flex; min-height: 0; background: radial-gradient(ellipse at 20% 50%, #7e9ee8 0%, #5a7edc 70%); }
+#xp-desktop-environment .lg-left, #xp-desktop-environment .lg-right { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 20px 40px; }
+#xp-desktop-environment .lg-left { align-items: flex-end; border-right: 2px solid; border-image: linear-gradient(to bottom, rgba(255,255,255,0), #fff 50%, rgba(255,255,255,0)) 1; text-align: right; }
+#xp-desktop-environment .lg-logo { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+#xp-desktop-environment .lg-flag { width: 72px; height: 72px; background-size: contain; background-repeat: no-repeat; background-position: center; }
+#xp-desktop-environment .lg-ms { font-size: 20px; }
+#xp-desktop-environment .lg-win { font-size: 44px; font-weight: bold; font-style: italic; }
+#xp-desktop-environment .lg-ms sup, #xp-desktop-environment .lg-win sup { font-size: .45em; }
+#xp-desktop-environment .lg-hint { margin-top: 18px; font-size: 18px; }
+#xp-desktop-environment .lg-right { align-items: flex-start; gap: 14px; }
+#xp-desktop-environment .lg-user {
+  display: flex; align-items: center; gap: 14px; background: none; border: 2px solid transparent; border-radius: 8px;
+  padding: 8px 14px; color: #fff; cursor: pointer; text-align: left; min-width: 260px;
+}
+#xp-desktop-environment .lg-user:hover { background: rgba(0, 48, 156, .45); border-color: rgba(255, 255, 255, .5); }
+#xp-desktop-environment .lg-avatar { width: 56px; height: 56px; border: 2px solid #fff; border-radius: 6px; background-color: #e9a53a; background-size: cover; background-position: center; flex: none; }
+#xp-desktop-environment .lg-avatar-2 { background-color: #3a9a3a; }
+#xp-desktop-environment .lg-uname { display: flex; flex-direction: column; font-size: 20px; }
+#xp-desktop-environment .lg-status { font-size: 13px; }
+#xp-desktop-environment .lg-status:empty { display: none; }
+
+#xp-desktop-environment .lg-c-banner { position: absolute; left: 0; right: 0; top: 14%; text-align: center; color: #fff; text-shadow: 2px 2px 0 #000; }
+#xp-desktop-environment .lg-c-ms { font-size: 20px; display: block; }
+#xp-desktop-environment .lg-c-win { font-size: 48px; font-weight: bold; }
+#xp-desktop-environment .lg-c-ed { font-size: 20px; margin-left: 8px; }
+#xp-desktop-environment .lg-c-win sup, #xp-desktop-environment .lg-c-ms sup { font-size: .45em; }
+#xp-desktop-environment .lg-c-dlg { position: absolute; left: 50%; top: 52%; transform: translate(-50%, -50%); width: 360px; max-width: calc(100vw - 20px); }
+#xp-desktop-environment .lg-c-dlg .window-body { background: #c0c0c0; padding: 14px; color: #000; font-size: 11px; }
+#xp-desktop-environment .lg-c-note { margin: 0 0 8px; min-height: 1.3em; }
+#xp-desktop-environment .lg-c-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+#xp-desktop-environment .lg-c-row input { width: 190px; }
+#xp-desktop-environment .lg-c-btns { display: flex; justify-content: center; gap: 8px; margin-top: 10px; }
+#xp-desktop-environment .lg-c-btns button { min-width: 75px; }
+
+@media (max-width: 700px) {
+  #xp-desktop-environment .lg-mid { flex-direction: column; overflow: auto; }
+  #xp-desktop-environment .lg-left { align-items: center; text-align: center; border-right: none; padding: 10px; }
+  #xp-desktop-environment .lg-right { align-items: center; padding: 10px; }
+  #xp-desktop-environment .lg-bottom-txt { display: none; }
 }

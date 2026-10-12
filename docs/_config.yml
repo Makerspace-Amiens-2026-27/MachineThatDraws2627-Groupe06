@@ -1,5 +1,5 @@
-title: Doc Projet # À MODIFIER : le nom de votre projet
-description: Documentation du projet # À MODIFIER : une phrase qui résume votre projet
+title: Dessinator 2000 # À MODIFIER : le nom de votre projet
+description: Documentation de notre machine qui dessine # À MODIFIER : une phrase qui résume votre projet
 
 # À MODIFIER : l'adresse de VOTRE repo GitHub (sans "/" à la fin).
 gh_edit_repository: "https://github.com/Makerspace-Amiens-2026-27/MachineThatDraws2627-Groupe06"
@@ -38,6 +38,9 @@ callouts:
   warning:
     title: Attention
     color: red
+  touche_perso:
+    title: Touche Personnelle
+    color: blue
 
 custom_css:
   - "/assets/css/winxp.css"
