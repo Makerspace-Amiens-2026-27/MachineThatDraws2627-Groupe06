@@ -13,8 +13,8 @@ Une phrase qui explique ce que fait le projet et pour qui.
 
 | Membre | Formation | Compte GitHub |
 |---|---|---|
-| Sacha SZESTAK | Kazmierczak in the pocket | [@Sacha-SZESTAK](https://github.com/sacha-SZESTAK) |
+| Sacha SZESTAK | Chef de projet | [@Sacha-SZESTAK](https://github.com/sacha-SZESTAK) |
 | Sacha HALEZA | éboueur | [@Sacha-HALEZA](https://github.com/sachahaleza-stack) |
 | Adrien SERVANT | Coureur de marathon | [@Adrien-SERVANT](https://github.com/Adrien-Servant) |
-| Samuel MOATTI | Consommateur engagé au distributeur | [@Samuel-MOATTI](https://github.com/SamuelMOATTI) |
+| Samuel MOATTI | Consommateur engagé au distributeur | [@SamSam mange tes grands morts](https://github.com/SamuelMOATTI) |
 | Louis DUBRAY | Etudiant | [@Louis-DUBAY](https://github.com/louis-DB) |
