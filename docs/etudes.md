@@ -22,8 +22,8 @@ title: Études et choix techniques
 
 | Solution étudiée | Source | Avantages | Inconvénients | Ce qu'on retient |
 |---|---|---|---|---|
-| Capteur de couleur TCS3200 | Projet Hackaday similaire | Simple, bien documenté | Sensible à la luminosité ambiante | À tester sous l'éclairage réel |
-| Tri par poids (balance) | Produit du commerce | Fiable, peu de composants | Ne distingue pas verre et plastique de même poids | Écarté : ne répond pas au besoin |
+| Machine a axe cartésien | Projet 3  | Simple, fonctionnelle et incassable | légèrement basique, pas original | probablement le meilleur choix |
+| Machine à corp X Y  | A remplir | aucun | Complexe, cher a produire et nécéssite une grande précision | Écarté : trop compliqué |
 | Vision par caméra | Forum robotique | Précis, flexible | Complexe à mettre en œuvre dans le délai | Écarté pour ce projet, piste pour une v2 |
 
 ## Pré-étude de faisabilité
