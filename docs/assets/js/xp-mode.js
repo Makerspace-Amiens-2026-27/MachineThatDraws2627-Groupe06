@@ -20,7 +20,7 @@
       return new URL(script.src).pathname.replace(/\/assets\/js\/[^\/]*$/, '');
     } catch (e) { return ''; }
   })();
-  window.XP_MODE_INFO = { version: 6, base: SITE_BASE };   // pour vérifier dans la console quelle version est chargée
+  window.XP_MODE_INFO = { version: 7, base: SITE_BASE };   // pour vérifier dans la console quelle version est chargée
   function sitePath(p) { return location.origin + SITE_BASE + p; }
   function assetIco(name) { return sitePath('/assets/images/winxp/ico/' + name + '.png'); }
   document.documentElement.style.setProperty('--xp-ico-volume', "url('" + assetIco('volume') + "')");
@@ -39,8 +39,9 @@
   var env = null, winsEl = null, tabsEl = null;
   var wins = [], seq = 0, zTop = 100, activeId = null, lastGeo = null, restoring = false;
   var showPrograms = false;
-  var mainProgramsHtml = null;
   var standbyOn = false, booting = false, bsodOn = false;
+
+  var OFFICE_ICO = { word: 'word97', excel: 'excel97', powerpoint: 'powerpoint97', access: 'access97', outlook: 'outlook97', pinball: 'word97', flight: 'excel97' };
 
   function getIconClass(type, url) {
     if (type === 'cpanel') return 'xp-ico-cpanel';
@@ -49,6 +50,7 @@
     if (type === 'recycle') return 'xp-ico-recycle';
     if (type === 'run') return 'xp-ico-run';
     if (type === 'notepad') return 'xp-ico-notepad';
+    if (OFFICE_ICO[type]) return 'xp-ico-' + OFFICE_ICO[type];
     if (!url) return 'xp-ico-folder';
     var cleanUrl = clean(url);
     if (cleanUrl.indexOf('/journal') !== -1) return 'xp-ico-journal';
@@ -100,7 +102,7 @@
       if (!cfg.keepState) { sessionStorage.removeItem(K_SES); return; }
       sessionStorage.setItem(K_SES, JSON.stringify({
         active: a ? winKey(a) : null,
-        windows: wins.filter(function (w) { return w.type !== 'notepad' && w.type !== 'run'; }).map(function (w) {
+        windows: wins.filter(function (w) { return w.type !== 'notepad' && w.type !== 'run' && !OFFICE_ICO[w.type]; }).map(function (w) {
           return { type: w.type, url: w.url, view: w.view, st: w.st, hist: w.hist, hi: w.hi };
         })
       }));
@@ -1044,7 +1046,12 @@
     var map = {
       notepad: function () { createNotepad(); },
       control: function () { openApp('cpanel'); },
-      msinfo32: function () { openApp('sysinfo'); }
+      msinfo32: function () { openApp('sysinfo'); },
+      winword: function () { openOffice('word'); },
+      excel: function () { openOffice('excel'); },
+      powerpnt: function () { openOffice('powerpoint'); },
+      msaccess: function () { openOffice('access'); },
+      outlook: function () { openOffice('outlook'); }
     };
     if (!Object.prototype.hasOwnProperty.call(map, cmd)) {
       dialog({
@@ -1413,33 +1420,99 @@
       '\');"></span><div class="xp-start-text"><strong>' + title + '</strong><span>' + sub + '</span></div></a></li>';
   }
 
-  function toggleProgramsView() {
-    showPrograms = !showPrograms;
-    var listEl = document.getElementById('xp-left-menu-list');
-    var btnText = document.getElementById('xp-programs-btn-text');
-    var arrow = document.getElementById('xp-programs-arrow');
-    if (!listEl) return;
+  /* ----- Menu "Tous les programmes" : menu en cascade ----- */
+  var PROG_TREE = [
+    { t: 'Accueil', ico: 'computer', href: '/' },
+    { t: 'Objectifs du projet', ico: 'folder', href: '/objectifs.html' },
+    { t: 'Équipe et rôles', ico: 'folder', href: '/equipe.html' },
+    { t: 'Études et choix techniques', ico: 'folder', href: '/etudes.html' },
+    { t: 'Conception', ico: 'folder', href: '/conception/' },
+    { t: 'Fabrication et assemblage', ico: 'folder', href: '/fabrication/' },
+    { t: 'Tests et résultats', ico: 'tests', href: '/tests.html' },
+    { t: 'Journal de bord', ico: 'journal', href: '/journal/' },
+    null,
+    { t: 'Accessoires', ico: 'folder', sub: [
+      { t: 'Bloc-notes', ico: 'notepad', attr: 'data-xp-notepad' },
+      { t: 'Exécuter...', ico: 'run', attr: 'data-xp-app="run"' },
+      { t: 'Informations système', ico: 'sysinfo', attr: 'data-xp-app="sysinfo"' },
+      { t: 'Panneau de configuration', ico: 'cpanel', attr: 'data-xp-app="cpanel"' }
+    ] },
+    { t: 'Office 97', ico: 'folder', sub: [
+      { t: 'Microsoft Access', ico: 'access97', attr: 'data-xp-office="access"' },
+      { t: 'Microsoft Excel', ico: 'excel97', attr: 'data-xp-office="excel"' },
+      { t: 'Microsoft Outlook', ico: 'outlook97', attr: 'data-xp-office="outlook"' },
+      { t: 'Microsoft PowerPoint', ico: 'powerpoint97', attr: 'data-xp-office="powerpoint"' },
+      { t: 'Microsoft Word', ico: 'word97', attr: 'data-xp-office="word"' }
+    ] }
+  ];
 
-    if (showPrograms) {
-      if (!mainProgramsHtml) mainProgramsHtml = listEl.innerHTML;
-      if (btnText) btnText.textContent = 'Retour';
-      if (arrow) arrow.classList.add('back');
-      listEl.innerHTML = [
-        progItem('/', 'computer', 'Accueil', 'Principal'),
-        progItem('/objectifs.html', 'folder', 'Objectifs', 'Buts du projet'),
-        progItem('/equipe.html', 'folder', 'Équipe', 'Membres'),
-        progItem('/etudes.html', 'folder', 'Études', 'Recherches'),
-        progItem('/conception/', 'folder', 'Conception', 'CAO & Code'),
-        progItem('/fabrication/', 'folder', 'Fabrication', 'Assemblage'),
-        progItem('/tests.html', 'tests', 'Tests', 'Résultats'),
-        progItem('/journal/', 'journal', 'Journal', 'Suivi')
-      ].join('');
-    } else {
-      if (btnText) btnText.textContent = 'Tous les programmes';
-      if (arrow) arrow.classList.remove('back');
-      if (mainProgramsHtml) listEl.innerHTML = mainProgramsHtml;
+  function flyList(items) {
+    return '<ul>' + items.map(function (it) {
+      if (!it) return '<li class="fly-sep"></li>';
+      var ico = '<span class="fly-ico" style="background-image: url(\'' + assetIco(it.ico) + '\');"></span>';
+      if (it.sub) {
+        return '<li class="has-sub"><a href="#" data-fly-sub>' + ico + '<span class="fly-t">' + it.t + '</span><span class="fly-arr"></span></a>' +
+          '<div class="xp-flyout xp-sub">' + flyList(it.sub) + '</div></li>';
+      }
+      var href = it.href ? sitePath(it.href) : '#';
+      return '<li><a href="' + href + '"' + (it.attr ? ' ' + it.attr : '') + '>' + ico + '<span class="fly-t">' + it.t + '</span></a></li>';
+    }).join('') + '</ul>';
+  }
+
+  function buildFlyout() {
+    var fl = document.getElementById('xp-programs-flyout');
+    if (fl && !fl.firstChild) fl.innerHTML = flyList(PROG_TREE);
+  }
+
+  function toggleProgramsView(force) {
+    var fl = document.getElementById('xp-programs-flyout');
+    var btn = document.getElementById('xp-toggle-programs-btn');
+    if (!fl) return;
+    buildFlyout();
+    var open = typeof force === 'boolean' ? force : !fl.classList.contains('open');
+    showPrograms = open;
+    fl.classList.toggle('open', open);
+    var arrow = document.getElementById('xp-programs-arrow');
+    if (arrow) arrow.classList.toggle('active', open);
+    if (btn) btn.classList.toggle('active', open);
+    fl.querySelectorAll('li.open').forEach(function (li) { li.classList.remove('open'); });
+    if (open && btn) {
+      var r = btn.getBoundingClientRect();
+      fl.style.left = Math.max(0, Math.round(r.right - 8)) + 'px';
+      fl.style.bottom = Math.max(0, Math.round(window.innerHeight - r.bottom)) + 'px';
     }
   }
+
+  // Un sous-menu qui dépasse en bas de l'écran est remonté pour rester entièrement visible
+  document.addEventListener('mouseover', function (e) {
+    var li = e.target && e.target.closest ? e.target.closest('#xp-programs-flyout li.has-sub') : null;
+    if (!li) return;
+    var sub = li.querySelector(':scope > .xp-sub');
+    if (!sub) return;
+    sub.style.top = '-3px';
+    var r = sub.getBoundingClientRect();
+    var over = r.bottom - (window.innerHeight - 34);        // 34 px = barre des tâches
+    if (over > 0) sub.style.top = Math.max(-(li.getBoundingClientRect().top - 4) , -3 - over) + 'px';
+  });
+
+  /* ----- Office 97 : chargé à la demande ----- */
+  var officeLoading = null;
+  function loadOffice(cb) {
+    if (window.XPOffice) { cb(); return; }
+    if (!officeLoading) {
+      officeLoading = [];
+      var sc = document.createElement('script');
+      sc.src = sitePath('/assets/js/office97.js') + '?v=1';
+      sc.onload = function () { var q = officeLoading; officeLoading = null; q.forEach(function (f) { f(); }); };
+      sc.onerror = function () {
+        officeLoading = null;
+        dialog({ title: 'Office 97', icon: 'error', text: 'Impossible de charger Office 97 (assets/js/office97.js introuvable).', buttons: [{ label: 'OK' }] });
+      };
+      document.head.appendChild(sc);
+    }
+    officeLoading.push(cb);
+  }
+  function openOffice(name) { loadOffice(function () { openApp(name); }); }
 
   function initClock() {
     var clockEl = document.getElementById('xp-tray-clock');
@@ -1511,7 +1584,7 @@
     var startBtn = document.getElementById('xp-start-btn');
     if (menu) menu.classList.remove('open');
     if (startBtn) startBtn.classList.remove('active');
-    if (showPrograms) toggleProgramsView();
+    if (showPrograms) toggleProgramsView(false);
 
     black.classList.add('active');                          // 1) écran noir
     wins.slice().forEach(function (w) { closeWin(w); });    // comme un vrai redémarrage : plus aucune fenêtre
@@ -1550,6 +1623,7 @@
     document.body.appendChild(env);
 
     initClock();
+    buildFlyout();
 
     winsEl = env.querySelector('#xp-windows');
     tabsEl = env.querySelector('#xp-task-tabs');
@@ -1728,6 +1802,7 @@
     var shutdownOverlay = document.getElementById('xp-shutdown-overlay');
 
     if (t.closest('[data-xp-start]')) {
+      toggleProgramsView(false);
       menu.classList.toggle('open');
       if (startBtn) startBtn.classList.toggle('active', menu.classList.contains('open'));
       return;
@@ -1765,11 +1840,37 @@
       toggleProgramsView();
       return;
     }
-
-    if (!t.closest('#xp-start-menu') && !t.closest('[data-xp-start]') && (!shutdownOverlay || !shutdownOverlay.contains(t))) {
+    var flySub = t.closest('[data-fly-sub]');
+    if (flySub) {
+      e.preventDefault();
+      var li = flySub.parentNode;
+      var was = li.classList.contains('open');
+      Array.prototype.forEach.call(li.parentNode.children, function (x) { x.classList.remove('open'); });
+      if (!was) li.classList.add('open');
+      return;
+    }
+    var ofc = t.closest('[data-xp-office]');
+    if (ofc) {
+      e.preventDefault();
       menu.classList.remove('open');
       if (startBtn) startBtn.classList.remove('active');
-      if (showPrograms) toggleProgramsView();
+      toggleProgramsView(false);
+      openOffice(ofc.getAttribute('data-xp-office'));
+      return;
+    }
+    if (t.closest('[data-xp-notepad]')) {
+      e.preventDefault();
+      menu.classList.remove('open');
+      if (startBtn) startBtn.classList.remove('active');
+      toggleProgramsView(false);
+      createNotepad();
+      return;
+    }
+
+    if (!t.closest('#xp-start-menu') && !t.closest('#xp-programs-flyout') && !t.closest('[data-xp-start]') && (!shutdownOverlay || !shutdownOverlay.contains(t))) {
+      menu.classList.remove('open');
+      if (startBtn) startBtn.classList.remove('active');
+      if (showPrograms) toggleProgramsView(false);
     }
 
     var sndTest = t.closest('[data-snd-test]');
@@ -1813,7 +1914,7 @@
       e.preventDefault();
       menu.classList.remove('open');
       if (startBtn) startBtn.classList.remove('active');
-      if (showPrograms) toggleProgramsView();
+      if (showPrograms) toggleProgramsView(false);
       openApp(app.getAttribute('data-xp-app'));
       return;
     }
@@ -1854,7 +1955,7 @@
     if (a && env.contains(a)) {
       menu.classList.remove('open');
       if (startBtn) startBtn.classList.remove('active');
-      if (showPrograms) toggleProgramsView();
+      if (showPrograms) toggleProgramsView(false);
       handleLink(e, a, w);
     }
   });
@@ -2021,6 +2122,12 @@
       onCfg(k);
     }
   });
+
+  window.XP_API = {
+    APPS: APPS, createWindow: createWindow, focusWin: focusWin, closeWin: closeWin, winOf: winOf,
+    dialog: dialog, playSound: playSound, assetIco: assetIco, openApp: openApp, setTitle: setTitle,
+    env: function () { return env; }
+  };
 
   (function boot() {
     var tpl = document.getElementById('xp-template');

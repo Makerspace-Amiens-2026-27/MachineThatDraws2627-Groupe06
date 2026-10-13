@@ -16,7 +16,7 @@ html.xp-on body {
 }
 
 /* Rendu universel des icônes pour forcer leur affichage */
-.xp-start-ico, .xp-win-title-ico, .xp-tab-ico, .xp-flag-icon, .cp-ico, .si-logo, .sr-ico, .sr-dog, .rb-ico, .rn-ico, .xp-icon-img, #xp-start-avatar, .shutdown-ico {
+.xp-start-ico, .xp-win-title-ico, .xp-tab-ico, .xp-flag-icon, .cp-ico, .si-logo, .sr-ico, .sr-dog, .rb-ico, .rn-ico, .xp-icon-img, #xp-start-avatar, .shutdown-ico, .fly-ico, .lg-off-ico {
   background-size: contain !important;
   background-repeat: no-repeat !important;
   background-position: center !important;
@@ -1299,3 +1299,41 @@ html.xp-classic #xp-desktop-environment .lg-classic { display: block; }
 
 /* Puces des listes : accrochées à leur <li> (sinon elles restent fixes à l'écran pendant le défilement) */
 #xp-desktop-environment .main-content li { position: relative; }
+
+
+/* ========== MENU "TOUS LES PROGRAMMES" (menu en cascade) ========== */
+#xp-desktop-environment #xp-programs-flyout { display: none; }
+#xp-desktop-environment #xp-start-menu.open ~ #xp-programs-flyout.open { display: block; }
+#xp-desktop-environment .xp-flyout {
+  position: fixed; z-index: 1000001; min-width: 210px; padding: 2px; box-sizing: border-box;
+  background: #fff; border: 1px solid #7a96df; box-shadow: 3px 3px 5px rgba(0, 0, 0, .4);
+  font-family: "Tahoma", Verdana, sans-serif; font-size: 11px; color: #000;
+}
+#xp-desktop-environment .xp-flyout ul { list-style: none; margin: 0; padding: 0; }
+#xp-desktop-environment .xp-flyout li { position: relative; margin: 0; padding: 0; }
+#xp-desktop-environment .xp-flyout li a {
+  display: flex; align-items: center; gap: 6px; padding: 4px 8px 4px 6px; color: #000 !important;
+  text-decoration: none; background: transparent !important; border: none !important; white-space: nowrap; cursor: default;
+}
+#xp-desktop-environment .xp-flyout .fly-ico { width: 16px; height: 16px; flex: none; }
+#xp-desktop-environment .xp-flyout .fly-t { flex: 1; }
+#xp-desktop-environment .xp-flyout .fly-arr { width: 0; height: 0; border-left: 4px solid #000; border-top: 4px solid transparent; border-bottom: 4px solid transparent; margin-left: 14px; }
+#xp-desktop-environment .xp-flyout li:hover > a,
+#xp-desktop-environment .xp-flyout li.open > a { background-color: #316ac5 !important; color: #fff !important; }
+#xp-desktop-environment .xp-flyout li:hover > a .fly-arr,
+#xp-desktop-environment .xp-flyout li.open > a .fly-arr { border-left-color: #fff; }
+#xp-desktop-environment .xp-flyout .fly-sep { height: 1px; margin: 3px 2px; background: #d0d0bf; }
+#xp-desktop-environment .xp-flyout .xp-sub { display: none; position: absolute; left: 100%; top: -3px; }
+#xp-desktop-environment .xp-flyout li.has-sub:hover > .xp-sub,
+#xp-desktop-environment .xp-flyout li.has-sub.open > .xp-sub { display: block; }
+#xp-desktop-environment .xp-flyout li.has-sub:hover > .xp-sub { z-index: 1; }
+#xp-desktop-environment .start-all-programs.active a, #xp-desktop-environment .start-all-programs:hover a { background-color: #316ac5 !important; color: #fff !important; }
+html.xp-classic #xp-desktop-environment .xp-flyout { background: #c0c0c0; border: 2px solid; border-color: #fff #404040 #404040 #fff; box-shadow: 1px 1px 0 #000; }
+html.xp-classic #xp-desktop-environment .xp-flyout li:hover > a,
+html.xp-classic #xp-desktop-environment .xp-flyout li.open > a { background-color: #000080 !important; }
+
+/* Icônes à gauche du nom dans les sous-menus de "Tous les programmes" */
+#xp-desktop-environment .xp-flyout li > a { flex-direction: row; }
+#xp-desktop-environment .xp-flyout .fly-ico { order: 0; width: 16px; height: 16px; }
+#xp-desktop-environment .xp-flyout .fly-t { order: 1; }
+#xp-desktop-environment .xp-flyout .fly-arr { order: 2; }
