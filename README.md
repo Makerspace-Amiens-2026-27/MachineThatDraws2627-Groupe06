@@ -13,8 +13,8 @@ Une phrase qui explique ce que fait le projet et pour qui.
 
 | Membre | Formation | Compte GitHub |
 |---|---|---|
-| Sacha SZESTAK |   PNJ | [@Sacha-SZESTAK](https://github.com/sacha-SZESTAK) |
-| Sacha HALEZA | CHEF DE PROJET  | [@Sacha-HALEZA](https://github.com/sachahaleza-stack) |
-| Adrien SERVANT | Coureur de marathon | [@Adrien-SERVANT](https://github.com/Adrien-Servant) |
+| Sacha SZESTAK | chef | [@Sacha-SZESTAK](https://github.com/sacha-SZESTAK) |
+| Sacha HALEZA | responsable documentation | [@Sacha-HALEZA](https://github.com/sachahaleza-stack) |
+| Adrien SERVANT | consommateur (remplaçant) eu distributeur | [@Adrien-SERVANT](https://github.com/Adrien-Servant) |
 | Samuel MOATTI | Consommateur engagé au distributeur | [@SamSam mange tes grands morts](https://github.com/SamuelMOATTI) |
-| Louis DUBRAY | Etudiant  | [@Louis-DUBAY](https://github.com/louis-DB) |
+| Louis DUBRAY | PNJ  | [@Louis-DUBAY](https://github.com/louis-DB) |
