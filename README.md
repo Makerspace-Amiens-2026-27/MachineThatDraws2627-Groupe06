@@ -13,7 +13,7 @@ Une phrase qui explique ce que fait le projet et pour qui.
 
 | Membre | Formation | Compte GitHub |
 |---|---|---|
-| Sacha SZESTAK | chef | [@Sacha-SZESTAK](https://github.com/sacha-SZESTAK) |
+| Sacha SZESTAK | codeur professionel | [@Sacha-SZESTAK](https://github.com/sacha-SZESTAK) |
 | Sacha HALEZA | responsable documentation | [@Sacha-HALEZA](https://github.com/sachahaleza-stack) |
 | Adrien SERVANT | consommateur (remplaçant) eu distributeur | [@Adrien-SERVANT](https://github.com/Adrien-Servant) |
 | Samuel MOATTI | Consommateur engagé au distributeur | [@SamSam](https://github.com/SamuelMOATTI) |
