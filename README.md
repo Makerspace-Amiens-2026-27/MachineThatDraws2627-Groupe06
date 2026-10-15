@@ -16,5 +16,5 @@ Une phrase qui explique ce que fait le projet et pour qui.
 | Sacha SZESTAK | chef | [@Sacha-SZESTAK](https://github.com/sacha-SZESTAK) |
 | Sacha HALEZA | responsable documentation | [@Sacha-HALEZA](https://github.com/sachahaleza-stack) |
 | Adrien SERVANT | consommateur (remplaçant) eu distributeur | [@Adrien-SERVANT](https://github.com/Adrien-Servant) |
-| Samuel MOATTI | Consommateur engagé au distributeur | [@SamSam mange tes grands morts](https://github.com/SamuelMOATTI) |
+| Samuel MOATTI | Consommateur engagé au distributeur | [@SamSam](https://github.com/SamuelMOATTI) |
 | Louis DUBRAY | PNJ  | [@Louis-DUBAY](https://github.com/louis-DB) |
