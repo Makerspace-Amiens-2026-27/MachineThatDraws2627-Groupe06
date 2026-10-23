@@ -31,7 +31,7 @@
   var HOME_URL = (script && script.getAttribute('data-home')) || '/';
   var dragMoved = false;
   // >>> METTEZ ICI LE LIEN VERS LEQUEL MÈNE LE FICHIER "secret" (double-clic sur le bureau) <<<
-  var SECRET_URL = '';
+  var SECRET_URL = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
   var K_SECRET = 'xp_secret_restored';
   var secretGone = false;           // "Vider la corbeille" : le fichier disparaît jusqu'au prochain redémarrage
 
