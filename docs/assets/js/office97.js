@@ -438,7 +438,7 @@
       ], { width: 300 });
     }
 
-    // --- Easter egg : "Blue" en gras et en bleu, suivi d'un espace, puis ? > A propos, Ctrl+Maj+clic sur l'icône
+    // --- Easter egg : "Blue" en gras et en bleu, suivi d'un espace, puis ? > A propos, Maj+clic sur l'icône
     function eggReady() {
       var txt = (page.textContent || '').replace(/ /g, ' ');
       if (!/Blue[ "]/.test(txt)) return false;
@@ -453,7 +453,7 @@
       return false;
     }
     function pinballTry(e, m) {
-      if (!(e.ctrlKey && e.shiftKey)) return;
+      if (!e.shiftKey) return;
       if (!eggReady()) return;
       if (m) m.close();
       startPinball(o);
@@ -685,7 +685,7 @@
       { t: '&#8630;', title: 'Annuler' }, '-',
       { t: '&#931;', title: 'Somme automatique', fn: function () { autoSum(); } }, '-',
       { t: '<span style="color:#800000;font-weight:bold;letter-spacing:-1px">&#9641;&#9643;</span>', title: 'Assistant Graphique', id: 'chart', fn: function (e) {
-        if (e.ctrlKey && e.shiftKey && gotoRange && tabsAfterGoto === 1) { startFlight(o); return; }
+        if (e.shiftKey && gotoRange && tabsAfterGoto === 1) { startFlight(o); return; }
         chartDialog();
       } }
     ]);
