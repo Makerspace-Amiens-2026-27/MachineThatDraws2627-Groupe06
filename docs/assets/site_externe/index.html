@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plotter Studio - SVG Contours & GCode</title>
+    <style>
+        :root {
+            --bg-color: #1e1e2e;
+            --card-bg: #2b2b3d;
+            --accent: #7a5cff;
+            --accent-hover: #6644ff;
+            --text: #e0e0e0;
+            --border: #3f3f5a;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        h1 { margin: 0; font-size: 1.5rem; color: #fff; }
+
+        .btn {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .btn:hover { background-color: var(--accent-hover); }
+        .btn-secondary { background-color: #4a4a6a; }
+        .btn-secondary:hover { background-color: #5a5a7a; }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 20px;
+            flex: 1;
+        }
+
+        .panel {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            overflow-y: auto;
+            max-height: calc(100vh - 100px);
+        }
+
+        .section-title {
+            font-weight: bold;
+            color: var(--accent);
+            margin-top: 15px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 4px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label { font-size: 0.85rem; margin-bottom: 4px; }
+        input, select, textarea {
+            background: #181825;
+            border: 1px solid var(--border);
+            color: white;
+            padding: 8px;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        .preview-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #11111b;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            padding: 20px;
+            position: relative;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+        }
+
+        .modal h2, .modal h3 { color: var(--accent); }
+        .close-modal { float: right; cursor: pointer; font-size: 1.5rem; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div>
+            <button id="toggle-mode-btn" class="btn btn-secondary">🔄 Passer au générateur de Contours SVG</button>
+        </div>
+        <h1 id="app-title">Générateur Gcode pour Plotter</h1>
+        <div>
+            <button id="help-btn" class="btn btn-secondary">❓ Aide & Tuto</button>
+        </div>
+    </header>
+
+    <!-- MODE 1 : SVG VERS GCODE -->
+    <div id="mode-gcode" class="main-layout">
+        <div class="panel">
+            <div class="form-group">
+                <label>Fichier SVG source :</label>
+                <input type="file" id="svg-file-input" accept=".svg">
+            </div>
+
+            <div class="section-title">Machine & Axe Z (Stylo)</div>
+            <div class="form-group">
+                <label>Mode de contrôle du stylo :</label>
+                <select id="pen-mode">
+                    <option value="z_axis">Axe Z classique (Moteur pas-à-pas)</option>
+                    <option value="servo">Servo-moteur (PWM / M3-M5)</option>
+                </select>
+            </div>
+            <div class="form-group z-param">
+                <label>Hauteur Stylo Levé (Z UP) [mm] :</label>
+                <input type="number" id="z-up" value="5" step="0.5">
+            </div>
+            <div class="form-group z-param">
+                <label>Hauteur Stylo Baissé (Z DOWN) [mm] :</label>
+                <input type="number" id="z-down" value="0" step="0.5">
+            </div>
+            <div class="form-group servo-param hidden">
+                <label>Angle / PWM Stylo Levé (M3 S...) :</label>
+                <input type="number" id="servo-up" value="90">
+            </div>
+            <div class="form-group servo-param hidden">
+                <label>Angle / PWM Stylo Baissé (M3 S...) :</label>
+                <input type="number" id="servo-down" value="30">
+            </div>
+            <div class="form-group">
+                <label>Délai d'activation stylo (ms) :</label>
+                <input type="number" id="pen-delay" value="150">
+            </div>
+
+            <div class="section-title">Vitesses (Feedrates)</div>
+            <div class="form-group">
+                <label>Vitesse de travail (G1) [mm/min] :</label>
+                <input type="number" id="feed-work" value="2000">
+            </div>
+            <div class="form-group">
+                <label>Vitesse de déplacement à vide (G0) [mm/min] :</label>
+                <input type="number" id="feed-travel" value="3500">
+            </div>
+            <div class="form-group">
+                <label>Vitesse de plongée Z [mm/min] :</label>
+                <input type="number" id="feed-z" value="800">
+            </div>
+
+            <div class="section-title">Dimensions & Échelle</div>
+            <div class="form-group">
+                <label>Unités :</label>
+                <select id="units">
+                    <option value="G21">Millimètres (G21)</option>
+                    <option value="G20">Pouces (G20)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Échelle globale (Scale factor) :</label>
+                <input type="number" id="scale-factor" value="1.0" step="0.1">
+            </div>
+            <div class="form-group">
+                <label>Décalage X (Offset X) [mm] :</label>
+                <input type="number" id="offset-x" value="0">
+            </div>
+            <div class="form-group">
+                <label>Décalage Y (Offset Y) [mm] :</label>
+                <input type="number" id="offset-y" value="0">
+            </div>
+
+            <div class="section-title">Scripts G-Code Personnalisés</div>
+            <div class="form-group">
+                <label>En-tête Gcode (Start Code) :</label>
+                <textarea id="start-code" rows="3">G90 ; Positionnement absolu&#10;G21 ; Unités mm</textarea>
+            </div>
+            <div class="form-group">
+                <label>Pied de page Gcode (End Code) :</label>
+                <textarea id="end-code" rows="3">G0 Z10 ; Sécurité&#10;G0 X0 Y0 ; Retour origine&#10;M84 ; Desactiver moteurs</textarea>
+            </div>
+
+            <button id="generate-gcode-btn" class="btn" style="width: 100%; margin-top: 15px;">💾 Générer & Télécharger Gcode</button>
+        </div>
+
+        <div class="preview-area">
+            <h3>Aperçu du tracé SVG</h3>
+            <div id="svg-container" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+                <p style="color: #666;">Chargez un fichier SVG pour afficher l'aperçu.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODE 2 : GENERATEUR SVG CONTOURS PURS -->
+    <div id="mode-flowfield" class="main-layout hidden">
+        <div class="panel">
+            <div class="form-group">
+                <label>Image source (JPG/PNG) :</label>
+                <input type="file" id="image-file-input" accept="image/*">
+            </div>
+
+            <div class="section-title">Réglages de Détection des Contours</div>
+            <div class="form-group">
+                <label>Sensibilité des Contours (Seuil) :</label>
+                <input type="number" id="ff-threshold" value="80" min="10" max="200" step="5">
+            </div>
+            <div class="form-group">
+                <label>Longueur Minimale d'une Ligne (px) :</label>
+                <input type="number" id="ff-min-length" value="4" min="1" max="20">
+            </div>
+
+            <button id="generate-ff-btn" class="btn" style="width: 100%; margin-top: 15px;">⚡ Extraire les Contours en SVG</button>
+            <button id="download-svg-btn" class="btn btn-secondary" style="width: 100%; margin-top: 10px;" disabled>💾 Télécharger le SVG</button>
+        </div>
+
+        <div class="preview-area">
+            <canvas id="ff-canvas" class="hidden"></canvas>
+            <div id="ff-svg-preview-container" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+                <p style="color: #666;">Chargez une image et cliquez sur Générer.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL : AIDE -->
+    <div id="help-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Manuel de Configuration</h2>
+            <p>1. Importez une image dans le générateur de contours pour extraire uniquement les silhouettes et traits d'arêtes.</p>
+            <p>2. Ajustez le seuil de sensibilité pour capturer plus ou moins de détails.</p>
+            <p>3. Téléchargez le fichier SVG et convertissez-le en Gcode pour votre plotter.</p>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = 'gcode';
+        let currentSvgContent = '';
+        let generatedSvgResult = '';
+
+        const toggleBtn = document.getElementById('toggle-mode-btn');
+        const modeGcode = document.getElementById('mode-gcode');
+        const modeFlowfield = document.getElementById('mode-flowfield');
+        const appTitle = document.getElementById('app-title');
+        const penModeSelect = document.getElementById('pen-mode');
+        const helpBtn = document.getElementById('help-btn');
+        const helpModal = document.getElementById('help-modal');
+        const closeModal = document.querySelector('.close-modal');
+
+        toggleBtn.addEventListener('click', () => {
+            if (currentMode === 'gcode') {
+                currentMode = 'flowfield';
+                modeGcode.classList.add('hidden');
+                modeFlowfield.classList.remove('hidden');
+                toggleBtn.innerText = "🔄 Passer au générateur GCODE";
+                appTitle.innerText = "Générateur de Contours SVG (Edge Detection)";
+            } else {
+                currentMode = 'gcode';
+                modeFlowfield.classList.add('hidden');
+                modeGcode.classList.remove('hidden');
+                toggleBtn.innerText = "🔄 Passer au générateur de Contours SVG";
+                appTitle.innerText = "Générateur Gcode pour Plotter";
+            }
+        });
+
+        penModeSelect.addEventListener('change', (e) => {
+            const isServo = e.target.value === 'servo';
+            document.querySelectorAll('.z-param').forEach(el => el.classList.toggle('hidden', isServo));
+            document.querySelectorAll('.servo-param').forEach(el => el.classList.toggle('hidden', !isServo));
+        });
+
+        helpBtn.onclick = () => helpModal.style.display = "flex";
+        closeModal.onclick = () => helpModal.style.display = "none";
+        window.onclick = (e) => { if (e.target == helpModal) helpModal.style.display = "none"; };
+
+        // --- SVG VERS GCODE ---
+        document.getElementById('svg-file-input').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                currentSvgContent = evt.target.result;
+                document.getElementById('svg-container').innerHTML = currentSvgContent;
+                const svgEl = document.getElementById('svg-container').querySelector('svg');
+                if (svgEl) {
+                    svgEl.style.maxWidth = '100%';
+                    svgEl.style.maxHeight = '100%';
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        document.getElementById('generate-gcode-btn').addEventListener('click', () => {
+            if (!currentSvgContent) {
+                alert("Veuillez d'abord sélectionner un fichier SVG.");
+                return;
+            }
+
+            const isServo = penModeSelect.value === 'servo';
+            const zUp = document.getElementById('z-up').value;
+            const zDown = document.getElementById('z-down').value;
+            const servoUp = document.getElementById('servo-up').value;
+            const servoDown = document.getElementById('servo-down').value;
+            const delay = document.getElementById('pen-delay').value;
+            const feedWork = document.getElementById('feed-work').value;
+            const feedTravel = document.getElementById('feed-travel').value;
+            const feedZ = document.getElementById('feed-z').value;
+            const units = document.getElementById('units').value;
+            const scale = parseFloat(document.getElementById('scale-factor').value);
+            const offsetX = parseFloat(document.getElementById('offset-x').value);
+            const offsetY = parseFloat(document.getElementById('offset-y').value);
+
+            let gcode = [];
+            gcode.push(`; Generated by Plotter Studio`);
+            gcode.push(document.getElementById('start-code').value);
+            gcode.push(units);
+
+            const penUpCmd = () => {
+                let cmds = [];
+                if (isServo) {
+                    cmds.push(`M3 S${servoUp}`);
+                } else {
+                    cmds.push(`G0 Z${zUp} F${feedZ}`);
+                }
+                if (delay > 0) cmds.push(`G4 P${delay}`);
+                return cmds;
+            };
+
+            const penDownCmd = () => {
+                let cmds = [];
+                if (isServo) {
+                    cmds.push(`M3 S${servoDown}`);
+                } else {
+                    cmds.push(`G1 Z${zDown} F${feedZ}`);
+                }
+                if (delay > 0) cmds.push(`G4 P${delay}`);
+                return cmds;
+            };
+
+            gcode.push(...penUpCmd());
+
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(currentSvgContent, "image/svg+xml");
+            const paths = doc.querySelectorAll('path, polyline, line, rect, polygon');
+
+            paths.forEach((path) => {
+                let points = [];
+                
+                if (path.tagName === 'polyline' || path.tagName === 'polygon') {
+                    const pts = path.getAttribute('points').trim().split(/\s+|,/);
+                    for (let i = 0; i < pts.length; i += 2) {
+                        if (!isNaN(pts[i]) && !isNaN(pts[i+1])) {
+                            points.push({ x: parseFloat(pts[i]), y: parseFloat(pts[i+1]) });
+                        }
+                    }
+                } else if (path.tagName === 'line') {
+                    points.push({ x: parseFloat(path.getAttribute('x1')), y: parseFloat(path.getAttribute('y1')) });
+                    points.push({ x: parseFloat(path.getAttribute('x2')), y: parseFloat(path.getAttribute('y2')) });
+                } else if (path.getPointAtLength) {
+                    const len = path.getTotalLength();
+                    const step = 1.0;
+                    for (let l = 0; l <= len; l += step) {
+                        const pt = path.getPointAtLength(l);
+                        points.push({ x: pt.x, y: pt.y });
+                    }
+                }
+
+                if (points.length > 0) {
+                    const startX = (points[0].x * scale + offsetX).toFixed(3);
+                    const startY = (points[0].y * scale + offsetY).toFixed(3);
+                    
+                    gcode.push(`G0 X${startX} Y${startY} F${feedTravel}`);
+                    gcode.push(...penDownCmd());
+
+                    for (let i = 1; i < points.length; i++) {
+                        const x = (points[i].x * scale + offsetX).toFixed(3);
+                        const y = (points[i].y * scale + offsetY).toFixed(3);
+                        gcode.push(`G1 X${x} Y${y} F${feedWork}`);
+                    }
+
+                    gcode.push(...penUpCmd());
+                }
+            });
+
+            gcode.push(document.getElementById('end-code').value);
+
+            const blob = new Blob([gcode.join('\n')], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'plotter_drawing.gcode';
+            link.click();
+        });
+
+        // --- ALGORITHME D'EXTRACTION DE CONTOURS PURS ---
+        let loadedImage = null;
+
+        document.getElementById('image-file-input').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const img = new Image();
+            img.onload = () => { loadedImage = img; };
+            img.src = URL.createObjectURL(file);
+        });
+
+        document.getElementById('generate-ff-btn').addEventListener('click', () => {
+            if (!loadedImage) {
+                alert("Veuillez d'abord charger une image.");
+                return;
+            }
+
+            const canvas = document.getElementById('ff-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            const width = 800;
+            const height = Math.round((loadedImage.height / loadedImage.width) * width);
+            
+            canvas.width = width;
+            canvas.height = height;
+
+            ctx.clearRect(0, 0, width, height);
+            ctx.drawImage(loadedImage, 0, 0, width, height);
+            const imgData = ctx.getImageData(0, 0, width, height);
+            const data = imgData.data;
+
+            const threshold = parseInt(document.getElementById('ff-threshold').value) || 80;
+            const minLength = parseInt(document.getElementById('ff-min-length').value) || 4;
+
+            let svgPaths = [];
+
+            // 1. Conversion de l'image en niveaux de gris
+            const lumMap = new Float32Array(width * height);
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i], g = data[i+1], b = data[i+2], a = data[i+3];
+                lumMap[i / 4] = (a < 50) ? 255 : (0.299 * r + 0.587 * g + 0.114 * b);
+            }
+
+            // 2. Filtre Sobel pour détecter l'intensité des gradients
+            const edgeMap = new Uint8Array(width * height);
+            for (let y = 1; y < height - 1; y++) {
+                for (let x = 1; x < width - 1; x++) {
+                    const idx = y * width + x;
+
+                    const gx = -lumMap[idx - width - 1] + lumMap[idx - width + 1]
+                               -2 * lumMap[idx - 1] + 2 * lumMap[idx + 1]
+                               -lumMap[idx + width - 1] + lumMap[idx + width + 1];
+
+                    const gy = -lumMap[idx - width - 1] - 2 * lumMap[idx - width] - lumMap[idx - width + 1]
+                               +lumMap[idx + width - 1] + 2 * lumMap[idx + width] + lumMap[idx + width + 1];
+
+                    const magnitude = Math.sqrt(gx * gx + gy * gy);
+                    if (magnitude > threshold) {
+                        edgeMap[idx] = 255;
+                    }
+                }
+            }
+
+            // 3. Extraction vectorielle des contours (lignes horizontales)
+            for (let y = 1; y < height - 1; y++) {
+                let currentPath = [];
+                for (let x = 1; x < width - 1; x++) {
+                    const idx = y * width + x;
+
+                    if (edgeMap[idx] === 255) {
+                        currentPath.push(`${x},${y}`);
+                    } else {
+                        if (currentPath.length >= minLength) {
+                            svgPaths.push(`<polyline points="${currentPath.join(' ')}" fill="none" stroke="black" stroke-width="1.0" stroke-linecap="round"/>`);
+                        }
+                        currentPath = [];
+                    }
+                }
+                if (currentPath.length >= minLength) {
+                    svgPaths.push(`<polyline points="${currentPath.join(' ')}" fill="none" stroke="black" stroke-width="1.0" stroke-linecap="round"/>`);
+                }
+            }
+
+            // 4. Extraction vectorielle secondaire (lignes verticales pour fermer les contours)
+            for (let x = 1; x < width - 1; x++) {
+                let currentPath = [];
+                for (let y = 1; y < height - 1; y++) {
+                    const idx = y * width + x;
+
+                    if (edgeMap[idx] === 255) {
+                        currentPath.push(`${x},${y}`);
+                    } else {
+                        if (currentPath.length >= minLength) {
+                            svgPaths.push(`<polyline points="${currentPath.join(' ')}" fill="none" stroke="black" stroke-width="1.0" stroke-linecap="round"/>`);
+                        }
+                        currentPath = [];
+                    }
+                }
+                if (currentPath.length >= minLength) {
+                    svgPaths.push(`<polyline points="${currentPath.join(' ')}" fill="none" stroke="black" stroke-width="1.0" stroke-linecap="round"/>`);
+                }
+            }
+
+            generatedSvgResult = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">
+                <rect width="100%" height="100%" fill="white"/>
+                ${svgPaths.join('\n')}
+            </svg>`;
+
+            document.getElementById('ff-svg-preview-container').innerHTML = generatedSvgResult;
+            document.getElementById('download-svg-btn').disabled = false;
+        });
+
+        document.getElementById('download-svg-btn').addEventListener('click', () => {
+            const blob = new Blob([generatedSvgResult], { type: 'image/svg+xml' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'contours_art.svg';
+            link.click();
+        });
+    </script>
+</body>
+</html>
