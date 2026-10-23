@@ -15,6 +15,6 @@ Une phrase qui explique ce que fait le projet et pour qui.
 |---|---|---|
 | Sacha SZESTAK | joueur pokemon go  | [@Sacha-SZESTAK](https://github.com/sacha-SZESTAK) |
 | Sacha HALEZA | tryharder GD | [@Sacha-HALEZA](https://github.com/sachahaleza-stack) |
-| Adrien SERVANT | coureur de semi-Marathon | [@Adrien-SERVANT](https://github.com/Adrien-Servant) |
+| Adrien SERVANT | consommateur aguerri du distributeur | [@Adrien-SERVANT](https://github.com/Adrien-Servant) |
 | Samuel MOATTI | Consommateur engagé au distributeur | [@Samuel-MOATTI](https://github.com/SamuelMOATTI) |
 | Louis DUBRAY | PNJ  | [@Louis-DUBAY](https://github.com/louis-DB) |
