@@ -22,7 +22,7 @@ title: Équipe et rôles
 | Sacha SZESTAK | Ingénieur ++ MAX | [@Sacha-SZESTAK](https://github.com/sacha-SZESTAK) |
 | Sacha HALEZA | éboueur | [@Sacha-HALEZA](https://github.com/sachahaleza-stack) |
 | Adrien SERVANT | Coureur de marathon | [@Adrien-SERVANT](https://github.com/Adrien-Servant) |
-| Samuel MOATTI | Consommateur engagé au distributeur | [@SamSam](https://github.com/SamuelMOATTI) |
+| Samuel MOATTI | Consommateur engagé au distributeur | [@Samuel-MOATTI](https://github.com/SamuelMOATTI) |
 | Louis DUBRAY | Etudiant | [@Louis-DUBAY](https://github.com/louis-DB) |
 
 
