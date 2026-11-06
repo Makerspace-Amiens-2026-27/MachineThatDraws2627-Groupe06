@@ -22,9 +22,9 @@ title: Études et choix techniques
 
 | Solution étudiée | Source | Avantages | Inconvénients | Ce qu'on retient |
 |---|---|---|---|---|
-| Machine a axe cartésien | [Projet 3](https://makerspace-amiens-2025-26.github.io/MachineThatDraws-Groupe03/) | Simple, fonctionnelle et incassable | légèrement basique, pas original | probablement le meilleur choix |
-| Machine à corp X Y  | A remplir | aucun | Complexe, cher a produire et nécéssite une grande précision | Écarté : trop compliqué |
-| Vision par caméra | Forum robotique | Précis, flexible | Complexe à mettre en œuvre dans le délai | Écarté pour ce projet, piste pour une v2 |
+| Machine a axe cartésien | [Projet 3](https://makerspace-amiens-2025-26.github.io/MachineThatDraws-Groupe03/) | conception Simple, fonctionnelle et facile à mettre en place| légèrement basique, pas original, moins rapide | Probablement le meilleur choix |
+| Machine à corp X Y  | A remplir | plus rapide | Complexe, cher a produire et nécéssite une grande précision | Écarté : trop compliqué |
+| Machine a bras articulé | A remplir | Moins de pièces  | Très complexe à mettre en œuvre, nécéssite une grande précision avec un point de pivot et une grande innercie | Écarté pour ce projet |
 
 ## Pré-étude de faisabilité
 
