@@ -22,9 +22,12 @@ title: Études et choix techniques
 
 | Solution étudiée | Source | Avantages | Inconvénients | Ce qu'on retient |
 |---|---|---|---|---|
-| Machine a axe cartésien | [Projet 3](https://makerspace-amiens-2025-26.github.io/MachineThatDraws-Groupe03/) | conception Simple, fonctionnelle et facile à mettre en place| légèrement basique, pas original, moins rapide | Probablement le meilleur choix |
-| Machine à corp X Y  | A remplir | plus rapide | Complexe, cher a produire et nécéssite une grande précision | Écarté : trop compliqué |
+| Machine a axe cartésien | [Projet 3](https://makerspace-amiens-2025-26.github.io/MachineThatDraws-Groupe03/) | conception Simple, fonctionnelle et facile à mettre en place| basique, pas original, moins rapide | Probablement le meilleur choix |
+| Machine à corp X Y  | A remplir | plus rapide | Complexe, nécéssite une grande précision | Écarté : trop compliqué |
 | Machine a bras articulé | A remplir | Moins de pièces  | Très complexe à mettre en œuvre, nécéssite une grande précision avec un point de pivot et une grande innercie | Écarté pour ce projet |
+
+![Machine a bras scara groupe 7 année 2025-2026](/MachineThatDraws2627-Groupe06/assets/images/etude_choix_tec/bras_chibre.jpg)
+
 
 ## Pré-étude de faisabilité
 
