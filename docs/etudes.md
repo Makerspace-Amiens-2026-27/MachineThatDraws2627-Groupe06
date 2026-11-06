@@ -37,6 +37,8 @@ title: Études et choix techniques
 Exemple : test du capteur de couleur sous l'éclairage réel sur 30 déchets :
 27 correctement identifiés.
 
+Attendre d'avoir des test et prototype pour completer cela.
+
 ## Choix techniques
 
 {: .a_modifier }
@@ -45,6 +47,8 @@ Exemple : test du capteur de couleur sous l'éclairage réel sur 30 déchets :
 > sur des arguments **techniques** : résultats de tests, performances, contraintes
 > du cahier des charges.
 > Voir [Tracer ses choix techniques](https://doc.makerspace-amiens.fr/workshops/methodologie-de-projet/concepts/tracer-choix-techniques/).
+
+Attendre d'avoir aussi des test et prototype pour regler certain probleme que le ne peux pas resoudre sans test
 
 Un diagramme **FAST** aide à passer d'une fonction du cahier des charges aux
 solutions possibles :
