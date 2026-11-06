@@ -25,7 +25,7 @@
   function assetIco(name) { return sitePath('/assets/images/winxp/ico/' + name + '.png'); }
   document.documentElement.style.setProperty('--xp-ico-volume', "url('" + assetIco('volume') + "')");
   document.documentElement.style.setProperty('--xp-ico-volume-off', "url('" + assetIco('volume-muted') + "')");
-  var AUTHOR = 'Jan Klod';          // nom affiché dans l'app "Informations système"
+  var AUTHOR = 'Sacha SZESTAK';          // nom affiché dans l'app "Informations système"
   var SEARCH_URL = (script && script.getAttribute('data-search')) || '/assets/js/search-data.json';
   var searchData = null, searchLoading = null;
   var HOME_URL = (script && script.getAttribute('data-home')) || '/';
