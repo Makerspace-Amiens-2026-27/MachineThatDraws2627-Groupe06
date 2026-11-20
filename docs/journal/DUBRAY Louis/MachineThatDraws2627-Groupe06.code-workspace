@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "../../.."
+		},
+		{
+			"name": "test_blink",
+			"path": "../../../../Documents/PlatformIO/Projects/test_blink"
+		},
+		{
+			"name": "pong-esp32",
+			"path": "../../../../Documents/PlatformIO/Projects/pong-esp32"
+		}
+	],
+	"settings": {}
+}
