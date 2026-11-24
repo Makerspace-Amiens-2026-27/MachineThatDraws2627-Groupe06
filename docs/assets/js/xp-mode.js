@@ -25,13 +25,13 @@
   function assetIco(name) { return sitePath('/assets/images/winxp/ico/' + name + '.png'); }
   document.documentElement.style.setProperty('--xp-ico-volume', "url('" + assetIco('volume') + "')");
   document.documentElement.style.setProperty('--xp-ico-volume-off', "url('" + assetIco('volume-muted') + "')");
-  var AUTHOR = 'Sacha SZESTAK';          // nom affiché dans l'app "Informations système"
+  var AUTHOR = 'Jan Klod';          // nom affiché dans l'app "Informations système"
   var SEARCH_URL = (script && script.getAttribute('data-search')) || '/assets/js/search-data.json';
   var searchData = null, searchLoading = null;
   var HOME_URL = (script && script.getAttribute('data-home')) || '/';
   var dragMoved = false;
   // >>> METTEZ ICI LE LIEN VERS LEQUEL MÈNE LE FICHIER "secret" (double-clic sur le bureau) <<<
-  var SECRET_URL = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+  var SECRET_URL = '';
   var K_SECRET = 'xp_secret_restored';
   var secretGone = false;           // "Vider la corbeille" : le fichier disparaît jusqu'au prochain redémarrage
 
@@ -49,6 +49,7 @@
     if (type === 'search') return 'xp-ico-search';
     if (type === 'recycle') return 'xp-ico-recycle';
     if (type === 'run') return 'xp-ico-run';
+    if (type === 'pause') return 'xp-ico-pause';
     if (type === 'notepad') return 'xp-ico-notepad';
     if (OFFICE_ICO[type]) return 'xp-ico-' + OFFICE_ICO[type];
     if (!url) return 'xp-ico-folder';
@@ -1395,13 +1396,117 @@
       '</div>';
   }
 
+  /* ===================== Compteur de pause =====================
+     Les données sont stockées dans une Firebase Realtime Database (gratuite, sans expiration), à l'adresse
+     <PAUSE_DB>/pause.json . Mettez l'adresse de votre base dans PAUSE_DB ci-dessous pour que tout le groupe
+     partage le même compteur (ou chacun la saisit via le lien dans l'app, elle est alors gardée dans son navigateur). */
+  var PAUSE_DB = 'https://compteur-pause-default-rtdb.europe-west1.firebasedatabase.app/';
+  var K_PAUSE_ID = 'xp_pause_db', K_PAUSE_CACHE = 'xp_pause_cache';
+  var pauseBusy = false;
+
+  function pId() {
+    if (PAUSE_DB) return PAUSE_DB;
+    try { return localStorage.getItem(K_PAUSE_ID) || ''; } catch (e) { return ''; }
+  }
+  function pUrl() { return pId().replace(/\/+$/, '') + '/pause.json'; }
+  function pauseNew() { return { start: new Date().toISOString(), count: 0, last: null }; }
+  function pauseValid(d) { return d && typeof d.count === 'number' && d.start; }
+  function pauseCacheGet() { try { var d = JSON.parse(localStorage.getItem(K_PAUSE_CACHE) || 'null'); return pauseValid(d) ? d : null; } catch (e) { return null; } }
+  function pauseCacheSet(d) { try { localStorage.setItem(K_PAUSE_CACHE, JSON.stringify(d)); } catch (e) {} }
+
+  // Lit le compteur ; { d: données (valeurs par défaut si la base est vide), empty: true si rien n'est encore enregistré }
+  function pauseFetch() {
+    return fetch(pUrl() + '?t=' + Date.now(), { cache: 'no-store' }).then(function (r) {
+      if (r.status === 401 || r.status === 403) throw new Error('accès refusé (règles de la base à vérifier)');
+      if (r.status === 404) throw new Error('base introuvable (adresse incorrecte ?)');
+      if (!r.ok) throw new Error('le service a répondu ' + r.status);
+      return r.json();
+    }).then(function (d) { return pauseValid(d) ? { d: d, empty: false } : { d: pauseNew(), empty: true }; });
+  }
+
+  function pauseDate(iso) {
+    var d = new Date(iso);
+    return d.toLocaleDateString('fr-FR') + ' à ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  }
+  function pauseStatus(w, text, err) {
+    var el = w.body.querySelector('.ps-status');
+    if (el) { el.textContent = text || ''; el.className = 'ps-status' + (err ? ' err' : ''); }
+  }
+  function paintPause(w, d) {
+    var q = function (c) { return w.body.querySelector(c); };
+    if (!q('.ps-count')) return;
+    q('.ps-since').textContent = new Date(d.start).toLocaleDateString('fr-FR');
+    q('.ps-count').textContent = String(d.count);
+    q('.ps-lastval').textContent = d.last ? pauseDate(d.last) : 'aucune pause enregistrée';
+    var tk = q('.ps-token');
+    if (tk) tk.textContent = PAUSE_DB ? '' : (pId() ? 'Changer l\'adresse du compteur' : 'Configurer le compteur partagé');
+  }
+  function paintAllPause(d) { wins.forEach(function (w) { if (w.type === 'pause') paintPause(w, d); }); }
+
+  function renderPause(w) {
+    w.view = 'home';
+    w.body.innerHTML =
+      '<div class="ps">' +
+        '<div class="ps-title">Nombre de pauses depuis le <span class="ps-since"></span></div>' +
+        '<div class="ps-count">…</div>' +
+        '<button type="button" class="ps-plus" data-pause-add title="Ajouter une pause">+</button>' +
+        '<div class="ps-last">Dernière pause le : <span class="ps-lastval"></span></div>' +
+        '<div class="ps-status"></div>' +
+        '<a href="#" class="ps-token" data-pause-token></a>' +
+      '</div>';
+    paintPause(w, pauseCacheGet() || pauseNew());
+    if (!pId()) { pauseStatus(w, 'Aucun compteur configuré : cliquez sur le lien ci-dessous.', true); return; }
+    pauseStatus(w, 'Chargement…');
+    pauseFetch().then(function (r) { pauseCacheSet(r.d); paintAllPause(r.d); pauseStatus(w, r.empty ? 'Compteur vide : il démarrera à la première pause.' : ''); })
+      .catch(function (e) { pauseStatus(w, 'Lecture impossible : ' + e.message, true); });
+  }
+
+  function pauseAskId(after) {
+    dialog({
+      title: 'Compteur partagé', icon: 'question',
+      text: 'Collez l\'adresse de la base Firebase du groupe (elle ressemble à https://xxxx-default-rtdb.europe-west1.firebasedatabase.app).',
+      input: { label: 'Adresse :', value: pId() },
+      buttons: [
+        { label: 'OK', action: function (v) {
+          var m = /^(https:\/\/[^\/\s?#]+)/i.exec((v || '').trim());
+          if (!m) return;
+          try { localStorage.setItem(K_PAUSE_ID, m[1]); localStorage.removeItem(K_PAUSE_CACHE); } catch (e) {}
+          wins.forEach(function (w) { if (w.type === 'pause') renderPause(w); });
+          if (after) after();
+        } },
+        { label: 'Annuler' }
+      ]
+    });
+  }
+
+  function addPause() {
+    if (!pId()) { pauseAskId(addPause); return; }
+    if (pauseBusy) return;
+    pauseBusy = true;
+    var ws = wins.filter(function (w) { return w.type === 'pause'; });
+    var say = function (t, e) { ws.forEach(function (w) { pauseStatus(w, t, e); }); };
+    say('Enregistrement…');
+    pauseFetch().then(function (r) {
+      // L'incrément est fait par le serveur : deux clics simultanés ne s'écrasent jamais
+      var patch = { count: { '.sv': { increment: 1 } }, last: new Date().toISOString() };
+      if (r.empty) patch.start = r.d.start;
+      return fetch(pUrl(), { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(patch) }).then(function (res) {
+        if (!res.ok) throw new Error(res.status === 401 || res.status === 403 ? 'écriture refusée (règles de la base à vérifier)' : 'le service a répondu ' + res.status);
+        return pauseFetch();
+      });
+    }).then(function (r) { pauseCacheSet(r.d); paintAllPause(r.d); say('Pause enregistrée.'); })
+      .catch(function (e) { say('Échec : ' + e.message, true); })
+      .then(function () { pauseBusy = false; });
+  }
+
   /* ===================== Applications du menu Démarrer ===================== */
   var APPS = {
     cpanel: { title: 'Panneau de configuration', render: renderCpanel },
     sysinfo: { title: 'Informations système', render: renderSysinfo },
     search: { title: 'Résultats de la recherche', render: renderSearch },
     recycle: { title: 'Corbeille', render: renderRecycle },
-    run: { title: 'Exécuter', render: renderRun }
+    run: { title: 'Exécuter', render: renderRun },
+    pause: { title: 'Compteur de pause', render: renderPause }
   };
 
   function openApp(name, st, view, quiet) {
@@ -1433,6 +1538,7 @@
     null,
     { t: 'Accessoires', ico: 'folder', sub: [
       { t: 'Bloc-notes', ico: 'notepad', attr: 'data-xp-notepad' },
+      { t: 'Compteur de pause', ico: 'pause', attr: 'data-xp-app="pause"' },
       { t: 'Exécuter...', ico: 'run', attr: 'data-xp-app="run"' },
       { t: 'Informations système', ico: 'sysinfo', attr: 'data-xp-app="sysinfo"' },
       { t: 'Panneau de configuration', ico: 'cpanel', attr: 'data-xp-app="cpanel"' }
@@ -1887,6 +1993,8 @@
     var npm = t.closest('[data-np-menu]');
     if (npm) { npm.classList.toggle('open'); return; }
 
+    if (t.closest('[data-pause-add]')) { e.preventDefault(); addPause(); return; }
+    if (t.closest('[data-pause-token]')) { e.preventDefault(); pauseAskId(); return; }
     var rn = t.closest('[data-rn-ok],[data-rn-cancel],[data-rn-browse]');
     if (rn) {
       e.preventDefault();

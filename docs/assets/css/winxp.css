@@ -1337,3 +1337,19 @@ html.xp-classic #xp-desktop-environment .xp-flyout li.open > a { background-colo
 #xp-desktop-environment .xp-flyout .fly-ico { order: 0; width: 16px; height: 16px; }
 #xp-desktop-environment .xp-flyout .fly-t { order: 1; }
 #xp-desktop-environment .xp-flyout .fly-arr { order: 2; }
+
+/* ========== COMPTEUR DE PAUSE ========== */
+#xp-desktop-environment .xp-window.xp-app-pause { width: 380px; height: 320px; top: 90px; left: 120px; max-height: none; }
+#xp-desktop-environment .xp-app-pause [data-xp-maximize] { display: none; }
+#xp-desktop-environment .xp-app-pause .window-body { background: #ece9d8 !important; }
+#xp-desktop-environment .ps { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 14px 10px; text-align: center; color: #000; }
+#xp-desktop-environment .ps-title { font-size: 13px; font-weight: bold; }
+#xp-desktop-environment .ps-count {
+  min-width: 120px; padding: 6px 18px; font: bold 44px "Courier New", monospace; color: #1fff3a; background: #000;
+  border: 2px inset #fff; letter-spacing: 2px;
+}
+#xp-desktop-environment .ps-plus { width: 64px; height: 36px; font: bold 24px Tahoma, sans-serif; cursor: pointer; }
+#xp-desktop-environment .ps-last { font-size: 12px; }
+#xp-desktop-environment .ps-status { min-height: 1.3em; font-size: 11px; color: #333; }
+#xp-desktop-environment .ps-status.err { color: #b00; }
+#xp-desktop-environment .ps-token { font-size: 11px; color: #0000ee; }
