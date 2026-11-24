@@ -1353,3 +1353,8 @@ html.xp-classic #xp-desktop-environment .xp-flyout li.open > a { background-colo
 #xp-desktop-environment .ps-status { min-height: 1.3em; font-size: 11px; color: #333; }
 #xp-desktop-environment .ps-status.err { color: #b00; }
 #xp-desktop-environment .ps-token { font-size: 11px; color: #0000ee; }
+
+/* ========== ÉCRAN DE VEILLE (panneau de configuration) ========== */
+#xp-desktop-environment .cp-saver-row { display: flex; align-items: center; gap: 8px; margin: 8px 0; }
+#xp-desktop-environment .cp-saver-row select { min-width: 150px; }
+#xp-desktop-environment .cp-saver-row input[type="number"] { width: 56px; }

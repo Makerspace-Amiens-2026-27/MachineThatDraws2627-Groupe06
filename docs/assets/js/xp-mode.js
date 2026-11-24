@@ -484,11 +484,22 @@
           return '<div class="cp-snd-row"><span>' + it[1] + '</span><button type="button" data-snd-test="' + it[0] + '"' + (snd.card ? '' : ' disabled') + '>Écouter</button></div>';
         }).join('') +
         '</div><p class="cp-snd-msg"></p></fieldset>';
+    } else if (view === 'saver') {
+      body = '<h2 class="cp-h">Écran de veille</h2>' +
+        '<fieldset><legend>Écran de veille</legend>' +
+        '<div class="cp-saver-row"><select id="cp-saver-type">' +
+        SAVERS.map(function (it) { return '<option value="' + it[0] + '"' + (saver.type === it[0] ? ' selected' : '') + '>' + it[1] + '</option>'; }).join('') +
+        '</select> <button type="button" data-saver-preview>Aperçu</button></div>' +
+        '<div class="cp-saver-row"><label for="cp-saver-min">Attendre :</label> ' +
+        '<input type="number" id="cp-saver-min" min="1" max="120" step="1" value="' + (saver.min < 1 ? 1 : Math.round(saver.min)) + '"> minutes</div>' +
+        '<p class="cp-hint">Pour quitter l\'écran de veille, bougez la souris ou appuyez sur une touche.</p>' +
+        '</fieldset>';
     } else {
       body = '<h2 class="cp-h">Choisissez une catégorie</h2><div class="cp-cats">' +
         cat('appearance', 'theme', 'Apparence et thèmes') +
         cat('windows', 'multitask', 'Fenêtres et multitâche') +
-        cat('sound', 'sound', 'Son et périphériques audio') + '</div>';
+        cat('sound', 'sound', 'Son et périphériques audio') +
+        cat('saver', 'screensaver', 'Écran de veille') + '</div>';
     }
     if (view !== 'home') {
       body += '<p class="cp-actions"><button type="button" data-cp-view="home">&lt; Retour</button> ' +
@@ -1048,6 +1059,8 @@
       notepad: function () { createNotepad(); },
       control: function () { openApp('cpanel'); },
       msinfo32: function () { openApp('sysinfo'); },
+      sspipes: function () { startSaver('pipes'); },
+      ssmaze: function () { startSaver('maze'); },
       winword: function () { openOffice('word'); },
       excel: function () { openOffice('excel'); },
       powerpnt: function () { openOffice('powerpoint'); },
@@ -1620,6 +1633,54 @@
   }
   function openOffice(name) { loadOffice(function () { openApp(name); }); }
 
+  /* ===================== Écran de veille (Tuyaux 3D / Labyrinthe 3D) ===================== */
+  var K_SAVER = 'xp_saver';
+  var SAVERS = [['pipes', 'Tuyaux 3D'], ['maze', 'Labyrinthe 3D'], ['none', '(Aucun)']];
+  var saver = { type: 'pipes', min: 10 };
+  try {
+    var _sv = JSON.parse(localStorage.getItem(K_SAVER) || 'null');
+    if (_sv) {
+      if (/^(pipes|maze|none)$/.test(_sv.type)) saver.type = _sv.type;
+      if (+_sv.min > 0) saver.min = +_sv.min;
+    }
+  } catch (e) {}
+  function saveSaver() { try { localStorage.setItem(K_SAVER, JSON.stringify(saver)); } catch (e) {} }
+
+  var saverLoading = null, saverOn = false, lastActivity = Date.now();
+  function loadSaver(cb) {
+    if (window.XPSaver) { cb(); return; }
+    if (!saverLoading) {
+      saverLoading = [];
+      var sc = document.createElement('script');
+      sc.src = sitePath('/assets/js/screensaver.js') + '?v=1';
+      sc.onload = function () { var q = saverLoading; saverLoading = null; q.forEach(function (f) { f(); }); };
+      sc.onerror = function () {
+        saverLoading = null;
+        dialog({ title: 'Écran de veille', icon: 'error', text: 'Impossible de charger l\'écran de veille (assets/js/screensaver.js introuvable).', buttons: [{ label: 'OK' }] });
+      };
+      document.head.appendChild(sc);
+    }
+    saverLoading.push(cb);
+  }
+  function startSaver(type) {
+    if (saverOn || !type || type === 'none') return;
+    saverOn = true;
+    loadSaver(function () {
+      window.XPSaver.start(type, function () { saverOn = false; lastActivity = Date.now(); });
+      if (!window.XPSaver.running()) saverOn = false;
+    });
+    // si le chargement échoue, on libère le drapeau
+    setTimeout(function () { if (saverOn && !window.XPSaver) saverOn = false; }, 8000);
+  }
+  ['mousemove', 'mousedown', 'keydown', 'wheel', 'touchstart'].forEach(function (ev) {
+    document.addEventListener(ev, function () { if (!saverOn) lastActivity = Date.now(); }, true);
+  });
+  setInterval(function () {
+    if (!env || saverOn || saver.type === 'none') return;
+    if (standbyOn || booting || bsodOn || loginOn || exiting) return;
+    if (Date.now() - lastActivity >= saver.min * 60000) startSaver(saver.type);
+  }, 1000);
+
   function initClock() {
     var clockEl = document.getElementById('xp-tray-clock');
     if (!clockEl) return;
@@ -1993,6 +2054,12 @@
     var npm = t.closest('[data-np-menu]');
     if (npm) { npm.classList.toggle('open'); return; }
 
+    if (t.closest('[data-saver-preview]')) {
+      e.preventDefault();
+      var sel = document.getElementById('cp-saver-type');
+      startSaver(sel ? sel.value : saver.type);
+      return;
+    }
     if (t.closest('[data-pause-add]')) { e.preventDefault(); addPause(); return; }
     if (t.closest('[data-pause-token]')) { e.preventDefault(); pauseAskId(); return; }
     var rn = t.closest('[data-rn-ok],[data-rn-cancel],[data-rn-browse]');
@@ -2137,7 +2204,11 @@
   document.addEventListener('change', function (e) {
     var t = e.target;
     if (!env || !t) return;
-    if (t.id === 'cp-card') {
+    if (t.id === 'cp-saver-type') {
+      saver.type = t.value; saveSaver();
+    } else if (t.id === 'cp-saver-min') {
+      var mv = Math.max(1, Math.min(120, Math.round(+t.value) || 1)); t.value = mv; saver.min = mv; saveSaver();
+    } else if (t.id === 'cp-card') {
       // Carte audio : "branchée" (activée) ou "débranchée" (désactivée, le son reste sur muet)
       if (t.checked) {
         snd.card = true;
