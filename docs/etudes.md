@@ -49,19 +49,18 @@ title: Études et choix techniques
 
 
 
-
 ## Pré-étude de faisabilité
 
-{: .a_modifier }
-> Quels points techniques vous inquiétaient, et comment les avez-vous testés
-> rapidement (montage sur platine d'essai, pièce imprimée de test…) ? Résultats ?
-> Vous pouvez résumer ici et détailler les protocoles et mesures dans la page
-> [Tests et résultats](tests.md), avec un lien vers la section concernée.
+Avant de valider nos choix, nous voulons vérifier trois points qui nous inquiètent le plus.
 
-Exemple : test du capteur de couleur sous l'éclairage réel sur 30 déchets :
-27 correctement identifiés.
+| Test | Pourquoi | Comment on le teste | Critère de réussite |
+|---|---|---|---|
+| **Stabilité du relevage du stylo** | Vérifier que le stylo se lève et se baisse sans saccades, ce qui abîmerait le dessin | Monter chaque solution (pales + ressort, courroie crantée, levier) et faire répéter 50 à 100 lever/baisser, en observant les à-coups et le point de contact sur la feuille | Mouvement fluide, pas de point ou de trait parasite à la reprise du tracé, servomoteur qui ne force pas |
+| **Vibrations de la machine** | Les moteurs et les va-et-vient des axes peuvent faire trembler le tracé | Tracer des lignes droites, des carrés et des cercles à plusieurs vitesses, puis regarder si les traits sont ondulés ou doublés | Traits droits et nets à la vitesse choisie ; pas de desserrage des vis après plusieurs tracés |
+| **Complexité et coordination des axes** | Faire travailler X, Y et le levage ensemble sans décalage | Envoyer d'abord un G-code simple (carré, diagonale), puis un dessin complet, et mesurer l'écart entre le dessin attendu et le dessin obtenu | Les formes se ferment correctement (le tracé revient au point de départ) et les diagonales sont régulières |
 
-Attendre d'avoir des test et prototype pour completer cela.
+{: .touche_perso }
+> Notre plus grosse crainte est la vibration de la machine, ainsi que la complexité de l'axe et la coordination de tous les axes entre eux. Ce sont ces tests qui décideront de la solution de levage du stylo retenue.
 
 ## Choix techniques
 
