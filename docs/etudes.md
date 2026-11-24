@@ -47,7 +47,7 @@ title: Études et choix techniques
 | G-code Art Generator | [Site](https://carlobalde-lang.github.io/gcode-art-generator/) | Transforme une image en G-code | Conçu pour l'impression 3D ; réutilisation pour le dessin incertaine | À tester |
 | Générateur maison (V0.1 / V0.2) | [V0.1](/MachineThatDraws2627-Groupe06/assets/site_externe/index.html), [V0.2](/MachineThatDraws2627-Groupe06/assets/site_externe/index2.html#gcode) | Adapté à notre besoin, avec options | Encore en développement | Piste principale |
 
-![Machine a bras scara groupe 7 année 2025-2026](/MachineThatDraws2627-Groupe06/assets/images/etude_choix_tec/bras_chibre.jpg)
+
 
 
 ## Pré-étude de faisabilité
