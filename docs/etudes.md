@@ -20,11 +20,32 @@ title: Études et choix techniques
 > chose de proche, et qu'est-ce que vous en retenez ? Citez vos sources.
 > Voir [Rechercher l'existant et étudier la faisabilité](https://doc.makerspace-amiens.fr/workshops/methodologie-de-projet/concepts/rechercher-existant-faisabilite/).
 
+### Comparaison des architectures de machine
+
 | Solution étudiée | Source | Avantages | Inconvénients | Ce qu'on retient |
 |---|---|---|---|---|
-| Machine a axe cartésien | [Projet 3](https://makerspace-amiens-2025-26.github.io/MachineThatDraws-Groupe03/) | conception Simple, fonctionnelle et facile à mettre en place| basique, pas original, moins rapide | Probablement le meilleur choix |
-| Machine à corp X Y  | A remplir | plus rapide | Complexe, nécéssite une grande précision | Écarté : trop compliqué |
-| Machine a bras articulé | A remplir | Moins de pièces  | Très complexe à mettre en œuvre, nécéssite une grande précision avec un point de pivot et une grande innercie | Écarté pour ce projet |
+| Machine à axes cartésiens (X et Y séparés) | [Projet Groupe 03](https://makerspace-amiens-2025-26.github.io/MachineThatDraws-Groupe03/), [Groupe 09](https://makerspace-amiens-2025-26.github.io/MachineThatDraws-Groupe09/), [3D Printed Arduino CNC Plotter](http://www.youtube.com/watch?v=XYqx5wg4oLU) | Conception simple, fonctionnelle et facile à mettre en place ; nombreux tutoriels (Arduino, GRBL, NEMA 17) | Basique, peu originale, moins rapide | **Retenue** : probablement le meilleur choix |
+| Machine à corps X-Y (CoreXY) | [Tutoriel LetMeKnow](https://letmeknow.fr/fr/blog/110-tuto-piloter-une-cnc-avec-arduino-et-grbl), [Guide AranaCorp](https://www.aranacorp.com/fr/controler-une-cnc-avec-lasergrbl-et-un-shield-cnc/) | Plus rapide | Complexe, nécessite une grande précision | Écartée : trop compliquée |
+| Machine à bras articulé (SCARA) | Projet Groupe 07 (2025-26), [lien](https://makerspace-amiens-2025-26.github.io/MachineThatDraws-Groupe07/) | Moins de pièces | Très complexe à mettre en œuvre, grande précision requise au point de pivot, forte inertie | Écartée pour ce projet |
+| Traceur à stylo suspendu (mural) | [Suspended Pen XY Plotter](http://www.youtube.com/watch?v=yd0BQS4SESk) | Grande surface de dessin | Précision moindre, installation murale nécessaire | Écartée : ne correspond pas à notre cahier des charges |
+| Mini machine à moteurs de lecteurs CD/DVD | [Mini Arduino CNC Drawing Machine](http://www.youtube.com/watch?v=e7T7eLR0t_E) | Récupération de matériel, compacte, peu chère | Course très réduite | Intéressant pour le principe, pas pour la taille |
+| Robot avec changeur automatique de stylos (8 stylos) | [Drawing Robot Pen Changer](http://www.youtube.com/watch?v=J4rVkgPuZJk) | Dessin multicolore sans intervention | Mécanique et contrôleur plus complexes | Option d'amélioration possible, pas prioritaire |
+
+### Sous-système : lever et baisser le stylo (servomoteur)
+
+| Solution étudiée | Source | Avantages | Inconvénients | Ce qu'on retient |
+|---|---|---|---|---|
+| Pales + ressort | [Vidéo YouTube (à 8:05)](https://www.youtube.com/watch?v=CW3tCkms7oM) | Facile à utiliser et à comprendre | Structure à lever à garder légère, sinon risque de casser le servomoteur | À comparer |
+| Roue crantée + bande crantée | Idée de l'équipe | Facile à utiliser et à comprendre | Même risque si la structure est trop lourde | À comparer |
+| Levier | Schéma de l'équipe | Meilleure précision (à vérifier) | Un peu plus difficile à comprendre ; risque de blocage si mal réglé | À comparer |
+
+### Sous-système : génération du G-code
+
+| Solution étudiée | Source | Avantages | Inconvénients | Ce qu'on retient |
+|---|---|---|---|---|
+| Universal G-code Sender | [GitHub](https://github.com/winder/Universal-G-Code-Sender/releases) | Compatible Windows, macOS et Linux ; envoie et génère du G-code pour dessiner | Prise en main du logiciel | Retenu pour l'envoi du G-code |
+| G-code Art Generator | [Site](https://carlobalde-lang.github.io/gcode-art-generator/) | Transforme une image en G-code | Conçu pour l'impression 3D ; réutilisation pour le dessin incertaine | À tester |
+| Générateur maison (V0.1 / V0.2) | [V0.1](/MachineThatDraws2627-Groupe06/assets/site_externe/index.html), [V0.2](/MachineThatDraws2627-Groupe06/assets/site_externe/index2.html#gcode) | Adapté à notre besoin, avec options | Encore en développement | Piste principale |
 
 ![Machine a bras scara groupe 7 année 2025-2026](/MachineThatDraws2627-Groupe06/assets/images/etude_choix_tec/bras_chibre.jpg)
 
