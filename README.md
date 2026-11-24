@@ -13,8 +13,8 @@ Une phrase qui explique ce que fait le projet et pour qui.
 
 | Membre | Formation | Compte GitHub |
 |---|---|---|
-| Sacha SZESTAK | joueur pokemon go  | [@Sacha-SZESTAK](https://github.com/sacha-SZESTAK) |
-| Sacha HALEZA | tryharder GD | [@Sacha-HALEZA](https://github.com/sachahaleza-stack) |
-| Adrien SERVANT | consommateur aguerri du distributeur | [@Adrien-SERVANT](https://github.com/Adrien-Servant) |
-| Samuel MOATTI | Consommateur engagé au distributeur | [@Samuel-MOATTI](https://github.com/SamuelMOATTI) |
-| Louis DUBRAY | PNJ  | [@Louis-DUBAY](https://github.com/louis-DB) |
+| Sacha SZESTAK | sans chauffage  | [@Sacha-SZESTAK](https://github.com/sacha-SZESTAK) |
+| Sacha HALEZA | Joueur Albion "malade" | [@Sacha-HALEZA](https://github.com/sachahaleza-stack) |
+| Adrien SERVANT | sous-chef approuvé par SachaS| [@Adrien-SERVANT](https://github.com/Adrien-Servant) |
+| Samuel MOATTI | Comiteur fou | [@Samuel-MOATTI](https://github.com/SamuelMOATTI) |
+| Louis DUBRAY | Fonctionaire en pause  | [@Louis-DUBAY](https://github.com/louis-DB) |
